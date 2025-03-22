@@ -16,5 +16,5 @@ playable and polished within a short timeframe, but expressive and thoughtful in
 This week was about laying the foundation—defining the mood, world, and core mechanic. Next up: blocking out the first level in Godot, prototyping the echo interaction, 
 and maybe animating the Wanderer’s idle pose if time permits.
 
-“The footsteps are getting louder.”
+“The footsteps are getting louder.” - ENGL 3500 HW9
 Let’s keep moving.
