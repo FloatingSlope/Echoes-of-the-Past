@@ -16,3 +16,27 @@ This week was about laying the foundation—defining the mood, world, and core m
 
 “The footsteps are getting louder.” - ENGL 3500 HW9
 Let’s keep moving.
+
+---
+
+## Devlog Entry 02 — “Echoes Shifted”  
+Date: March 29, 2025
+
+This week, the project took an unexpected—but honest—turn. While the foundation for a 2D puzzle platformer still holds strong, I realized that the **heart of Echoes of the Past lies in its narrative and tone**, not its jump mechanics.
+
+So I’ve officially pivoted the game to an **interactive fiction project built in Inky**. It’s still the same Veiled Wanderer, still the same decaying city and mysterious echoes—but now the player navigates through **branching choices, lore entries, and shifting memories**, rather than jumping across collapsing platforms.
+
+I’ve written a modular system for **hidden lore fragments**, each one revealing eerie, partial insights into the world. The player can choose whether to investigate these echoes or let them fade, tying directly into the game’s central question: what do we choose to remember?
+
+All prior assets remain in use. Pixel art visuals now support the story instead of driving it. UI sketches, echo meters, and map zones still matter—they now inform tone and setting rather than level layout.
+
+This shift has made development feel less mechanical and more creative. It’s not about "building levels" right now. It’s about finding the *story architecture beneath the ruins*.
+
+### Game Loop Sketch
+![Echo Loop](assets/echoes_game_loop_detailed.png)
+
+Next steps: expanding the core script, embedding lore entries throughout, and testing early narrative pacing.
+
+> “The game isn’t what I thought it was.  
+> It’s quieter.  
+> But somehow… louder too.”
