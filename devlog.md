@@ -35,6 +35,11 @@ This shift has made development feel less mechanical and more creative. It’s n
 ### Game Loop Sketch
 ![Echo Loop](assets/echoes_game_loop_detailed.png)
 
+### The Game Loop: 
+Explore → Sense Echoes → Choose to Remember → Reflect → Move On
+
+A slow, atmospheric loop where presence replaces action. The player uncovers, engages, and releases, like pulling memories out of fog. Not every echo reveals something—but every echo matters.
+
 Next steps: expanding the core script, embedding lore entries throughout, and testing early narrative pacing.
 
 > “The game isn’t what I thought it was.  
