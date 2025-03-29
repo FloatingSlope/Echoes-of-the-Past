@@ -34,6 +34,6 @@ Echoes of the Past builds its atmosphere through a focused loop:
 
 This loop is slow, deliberate, and emotionally quiet. Inspired by Jagoda’s idea of the *video game sensorium*, Echoes isn't about mastery—it’s about presence. You don’t dominate the world. You witness it.
 
-![Game Loop Diagram](assests/EOTP%20Game%20Loop.png)
+![Game Loop Diagram]([assets/EOTP%20Game%20Loop.png])
 
 > *“You don’t always build by coding. Sometimes, you build by remembering.”*
