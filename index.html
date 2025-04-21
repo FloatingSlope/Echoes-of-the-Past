@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of the Past</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Georgia", serif;
+            background-color: #000;
+            color: #f0f0f0;
+            overflow-x: hidden;
+            background-image: url('assets/Echoes_of_the_Past_alternative_cover.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 5;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            margin-top: 50px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .game-title {
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-family: "Times New Roman", serif;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(155, 155, 255, 0.7);
+        }
+        
+        .game-subtitle {
+            font-size: 18px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        
+        #story-container, #choices-container {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .instructions {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 3px solid #4caf50;
+        }
+        
+        #start-game {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .begin-button {
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #f0f0f0;
+            border: 2px solid #4caf50;
+            padding: 12px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            font-family: "Georgia", serif;
+        }
+        
+        .begin-button:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <h1 class="game-title">ECHOES OF THE PAST</h1>
+            <p class="game-subtitle">A journey through memory and time</p>
+        </header>
+        
+        <div class="instructions">
+            <p><strong>Instructions:</strong> Click on choices to progress through the story. You can also use number keys (1-9) to select choices.</p>
+            <p>Some choices may be timed, requiring you to make a quick decision. The Echo Journal in the top right tracks your discoveries.</p>
+        </div>
+        
+        <div id="start-game">
+            <button id="begin-button" class="begin-button">Begin Journey</button>
+        </div>
+        
+        <div id="story-container"></div>
+        <div id="choices-container"></div>
+    </div>
+    
+    <!-- Load required libraries and scripts -->
+    <script src="https://unpkg.com/inkjs@2.2.0/dist/ink.js"></script>
+    <script src="scripts/story_content.js"></script>
+    <script src="scripts/echo_images.js"></script>
+    <script src="scripts/ink_integration.js"></script>
+    <script>
+        // Set the cover image as soon as the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.EchoVisuals) {
+                setTimeout(() => {
+                    window.EchoVisuals.updateVisualState(['cover']);
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

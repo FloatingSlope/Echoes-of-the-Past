@@ -16,6 +16,7 @@
 // Include supporting script files
 INCLUDE lore_entries.ink    // Contains all collectible echo fragments
 INCLUDE echo_journal.ink    // Handles echo tracking and journal system
+INCLUDE memory_core.ink     // Contains the Memory Core endings system
 
 // ======================================================
 // GLOBAL STATE VARIABLES
@@ -461,17 +462,15 @@ The glow from your chest grows stronger as you descend.
     -> view_journal -> pavilion_door
 
 // ======================================================
-// FINAL AREA: MEMORY CORE (PLACEHOLDER)
+// FINAL AREA: MEMORY CORE (ENTRY POINT)
 // ======================================================
 === memory_core ===
-// The central nexus of all memories - currently unfinished
+// The central nexus of all memories
 You emerge into a vast chamber, circular and dominated by a column of light at its center.
 
 The column pulses with the same rhythm as the emblem on your chest. With each pulse, images flicker in the air around you—faces, buildings, landscapes.
 
 {remembered_echoes >= 3: Fragments you've collected throughout your journey appear stronger, more defined in the flickering images.}
-
-This is as far as the current implementation goes. The memory core awaits further development.
 
 // Conditional text based on how many echoes were discovered
 {
@@ -481,18 +480,13 @@ This is as far as the current implementation goes. The memory core awaits furthe
 - remembered_echoes >= 4: You have remembered many echoes. Their collective weight begins to shape something new within you.
 }
 
-// EXPANSION POTENTIAL: Memory Core to be developed into multiple endings
-// based on which specific echoes were remembered, potentially including:
-// - Returning/restoration ending
-// - Transcendence ending
-// - Becoming the new Watcher ending
-// - Forgetting/fading ending
++ (Explore_further)
+    // Continue to expanded Memory Core content
+    -> memory_core_continued
 
 + (Check_final_journal)
-    // Final journal check before ending
-    -> view_journal -> END
-
--> END
+    // Final journal check before continuing
+    -> view_journal -> memory_core
 
 // ======================================================
 // UTILITY FUNCTIONS
