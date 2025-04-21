@@ -6,87 +6,431 @@
     <title>Echoes of the Past</title>
     <style>
         body {
+            font-family: 'Georgia', serif;
+            background-color: #111;
+            color: #f0f0f0;
             margin: 0;
             padding: 0;
-            font-family: "Georgia", serif;
-            background-color: #000;
-            color: #f0f0f0;
-            overflow-x: hidden;
-            background-image: url('assets/Echoes_of_the_Past_alternative_cover.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            line-height: 1.6;
         }
         
         .game-container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
-            z-index: 5;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            margin-top: 50px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
         }
         
         .game-header {
             text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 10;
+            margin-bottom: 30px;
         }
         
         .game-title {
-            font-size: 36px;
-            margin-bottom: 10px;
-            font-family: "Times New Roman", serif;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(155, 155, 255, 0.7);
+            font-size: 48px;
+            margin-bottom: 5px;
+            color: #ccc;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
         
         .game-subtitle {
             font-size: 18px;
-            opacity: 0.8;
+            color: #aaa;
             font-style: italic;
-        }
-        
-        #story-container, #choices-container {
-            position: relative;
-            z-index: 10;
         }
         
         .instructions {
             background-color: rgba(0, 0, 0, 0.7);
             padding: 15px;
             border-radius: 5px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            border-left: 3px solid #4caf50;
+            margin-bottom: 30px;
         }
         
         #start-game {
             text-align: center;
-            margin: 30px 0;
+            margin: 50px 0;
         }
         
         .begin-button {
             background-color: rgba(50, 50, 70, 0.8);
-            color: #f0f0f0;
-            border: 2px solid #4caf50;
-            padding: 12px 30px;
-            font-size: 18px;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
             border-radius: 5px;
-            font-family: "Georgia", serif;
+            transition: all 0.3s ease;
         }
         
         .begin-button:hover {
             background-color: rgba(70, 70, 100, 0.9);
+            transform: translateY(-3px);
+        }
+        
+        #story-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #f0f0f0;
+            border-radius: 5px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .story-fragment {
+            margin-bottom: 20px;
+        }
+        
+        .story-fragment p {
+            margin-bottom: 16px;
+        }
+        
+        .player-choice {
+            background-color: rgba(80, 80, 100, 0.6);
+            border-left: 4px solid #4caf50;
+            padding: 10px 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        
+        #choices-container {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        
+        .choices-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .choice {
+            background-color: rgba(50, 50, 70, 0.8);
+            margin: 10px 0;
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .choice:hover {
+            background-color: rgba(70, 70, 100, 0.9);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .choice-number {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            line-height: 25px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .error-message {
+            background-color: rgba(255, 0, 0, 0.1);
+            border-left: 4px solid #ff6b6b;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+        
+        /* Echo Collection Toggle Button */
+        .echo-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 100;
+            display: none; /* Hidden initially until game starts */
+        }
+        
+        .echo-toggle:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+        }
+        
+        /* Map Button */
+        .map-toggle {
+            position: fixed;
+            top: 20px;
+            left: 120px;
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 100;
+            display: none; /* Hidden initially until game starts */
+        }
+        
+        .map-toggle:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+        }
+        
+        /* Menu Button */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 100;
+            display: none; /* Hidden initially until game starts */
+        }
+        
+        .menu-toggle:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+        }
+        
+        /* Echo Collection Panel */
+        .echo-collection {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            width: 250px;
+            background-color: rgba(20, 20, 30, 0.95);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            z-index: 99;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .echo-collection h3 {
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .echo-item {
+            margin-bottom: 20px;
+            background-color: rgba(40, 40, 60, 0.6);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .echo-item h4 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        
+        .echo-item p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .echo-placeholder {
+            text-align: center;
+            border: 2px dashed #333;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        
+        .echo-image {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .empty-collection {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+            padding: 30px 0;
+        }
+        
+        /* Fragment image in the story */
+        .fragment-image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .fragment-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 5px;
+            border: 1px solid #333;
+        }
+        
+        /* Map Panel */
+        .map-panel {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            width: 400px;
+            background-color: rgba(20, 20, 30, 0.95);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            z-index: 99;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .map-panel h3 {
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .map-container {
+            position: relative;
+            height: 300px;
+            border: 1px solid #333;
+            margin: 15px 0;
+            background-color: rgba(40, 40, 50, 0.7);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .map-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-style: italic;
+        }
+        
+        .map-location {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .map-location:hover {
+            width: 20px;
+            height: 20px;
+            background-color: #6abf6e;
+        }
+        
+        .map-location.current {
+            background-color: #ff9800;
+            box-shadow: 0 0 10px rgba(255, 152, 0, 0.7);
+        }
+        
+        .map-legend {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #ddd;
+        }
+        
+        .map-legend div {
+            margin-bottom: 5px;
+        }
+        
+        .map-legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .map-legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        /* Menu Panel */
+        .menu-panel {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            width: 250px;
+            background-color: rgba(20, 20, 30, 0.95);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            z-index: 99;
+            display: none;
+        }
+        
+        .menu-panel h3 {
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .menu-button {
+            display: block;
+            width: 100%;
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 12px 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .menu-button:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+        }
+        
+        /* Location Images */
+        .location-image-container {
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .location-image {
+            max-width: 100%;
+            max-height: 250px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .location-image-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: rgba(40, 40, 50, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-style: italic;
         }
     </style>
 </head>
@@ -99,7 +443,7 @@
         
         <div class="instructions">
             <p><strong>Instructions:</strong> Click on choices to progress through the story. You can also use number keys (1-9) to select choices.</p>
-            <p>Some choices may be timed, requiring you to make a quick decision. The Echo Journal in the top right tracks your discoveries.</p>
+            <p>Some choices may be timed, requiring you to make a quick decision.</p>
         </div>
         
         <div id="start-game">
@@ -110,20 +454,715 @@
         <div id="choices-container"></div>
     </div>
     
-    <!-- Load required libraries and scripts -->
-    <script src="https://unpkg.com/inkjs@2.2.0/dist/ink.js"></script>
-    <script src="scripts/story_content.js"></script>
-    <script src="scripts/echo_images.js"></script>
-    <script src="scripts/ink_integration.js"></script>
+    <!-- Echo Collection Button and Panel -->
+    <button id="echo-toggle" class="echo-toggle">View Echoes</button>
+    <div id="echo-collection" class="echo-collection">
+        <h3>Echo Collection</h3>
+        <div id="echo-list">
+            <div class="empty-collection">No echoes collected yet...</div>
+        </div>
+    </div>
+    
+    <!-- Map Button and Panel -->
+    <button id="map-toggle" class="map-toggle">View Map</button>
+    <div id="map-panel" class="map-panel">
+        <h3>Discovered Locations</h3>
+        <div class="map-container">
+            <div class="map-placeholder">Map will appear as you discover locations...</div>
+            <!-- Map markers will be added here dynamically -->
+        </div>
+        <div class="map-legend">
+            <div class="map-legend-item">
+                <div class="map-legend-color" style="background-color: #4caf50;"></div>
+                <span>Discovered Location</span>
+            </div>
+            <div class="map-legend-item">
+                <div class="map-legend-color" style="background-color: #ff9800;"></div>
+                <span>Current Location</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Menu Button and Panel -->
+    <button id="menu-toggle" class="menu-toggle">Menu</button>
+    <div id="menu-panel" class="menu-panel">
+        <h3>Game Menu</h3>
+        <button id="restart-button" class="menu-button">Restart Game</button>
+        <button id="instructions-button" class="menu-button">Instructions</button>
+        <button id="simplified-button" class="menu-button">Simplified Version</button>
+    </div>
+    
     <script>
-        // Set the cover image as soon as the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.EchoVisuals) {
-                setTimeout(() => {
-                    window.EchoVisuals.updateVisualState(['cover']);
-                }, 100);
+        // Simple Story Content
+        const storyContent = {
+            start: {
+                text: "You open your eyes, though you're not sure if they were ever closed.\n\nThe ground beneath you is cracked stone. Cold. Damp.\n\nAbove, a bloated moon clings to a colorless sky. Somewhere in the distance, something breathes—not with lungs, but with time.\n\nYou exhale. Or at least, you think you do.",
+                choices: [
+                    { text: "Look around", nextPassage: "look_around" },
+                    { text: "Walk forward", nextPassage: "walk_forward" }
+                ]
+            },
+            look_around: {
+                text: "The city is crumbling, but there is a strange stillness.\n\nBlackened structures claw toward the sky, half-swallowed by fog.\n\nThe only light comes from your chest — a soft, pulsing glow.\n\nIt flickers, in rhythm with something beneath the world.\n\nYou remember... nothing.",
+                choices: [
+                    { text: "Continue exploring", nextPassage: "keep_exploring" }
+                ]
+            },
+            walk_forward: {
+                text: "The stones shift beneath your feet.\n\nEach step echoes longer than it should.\n\nIn the distance, you hear a hum — not mechanical, but alive.\n\nSomething waits to be seen.",
+                choices: [
+                    { text: "Move toward the sound", nextPassage: "first_choice" }
+                ]
+            },
+            keep_exploring: {
+                text: "The road narrows. The air tightens.\n\nYou walk toward a broken arch, half-submerged in soil and time.\n\nTo your left, a path descends into shadow.\n\nTo your right, something flickers behind a rusted gate.",
+                choices: [
+                    { text: "Take the left path", nextPassage: "whisper_caverns" },
+                    { text: "Approach the gate", nextPassage: "memory_gate" },
+                    { text: "Examine the arch", nextPassage: "arch_echo" }
+                ]
+            },
+            first_choice: {
+                text: "You pass the remnants of what may have been a shrine.\n\nShattered beams. Crushed stone.\n\nSomething catches your eye — a glimmer beneath the rubble.\n\nIt pulses like your own chest does. But slower. Older.",
+                choices: [
+                    { text: "Investigate the glimmer", nextPassage: "investigate_glimmer" },
+                    { text: "Leave it alone", nextPassage: "leave_alone" }
+                ]
+            },
+            investigate_glimmer: {
+                text: "You brush aside the debris and reveal a glowing shard.\n\nIt pulses gently in your hand.\n\nIt is warm. Familiar.\n\nYou don't remember what it is—but it remembers you.\n\nThe glowing shard fades after a moment, but something has changed in you.\n\nThe emblem on your chest pulses slightly stronger now.",
+                isEcho: true,
+                echoId: "shrine_shard",
+                echoName: "Shrine Shard",
+                echoDescription: "A fragment of crystallized memory, pulsing with the heartbeat of a forgotten ritual.",
+                choices: [
+                    { text: "Continue", nextPassage: "keep_exploring" }
+                ]
+            },
+            leave_alone: {
+                text: "You step away.\n\nSome things are better left buried.\n\nThe light dims behind you.",
+                choices: [
+                    { text: "Continue", nextPassage: "keep_exploring" }
+                ]
+            },
+            whisper_caverns: {
+                text: "You descend slowly, your light barely touching the walls.\n\nThe echo follows.\n\nYou find yourself in a cavern not carved by hands, but by forgetting.\n\nThe walls breathe. Somewhere, water drips.\n\nIt sounds almost like a voice.",
+                choices: [
+                    { text: "Follow the sound", nextPassage: "follow_sound" },
+                    { text: "Touch the walls", nextPassage: "touch_walls" }
+                ]
+            },
+            memory_gate: {
+                text: "The gate resists you at first.\n\nBut the moment you place your hand on it, the hum returns—louder.\n\nThis gate remembers.\n\nThere is no key, only recognition.\n\nA glyph glows on its frame—the same one on your chest.",
+                choices: [
+                    { text: "Press your emblem against the gate", nextPassage: "press_emblem_gate" },
+                    { text: "Try another path", nextPassage: "try_another_path" }
+                ]
+            },
+            press_emblem_gate: {
+                text: "The gate shudders and begins to open, revealing a garden beyond.\n\nBut something isn't right. The plants flicker in and out of existence, unstable memories of what once grew here.",
+                choices: [
+                    { text: "Enter the garden", nextPassage: "ghost_garden_entry" }
+                ]
+            },
+            try_another_path: {
+                text: "You decide to explore elsewhere first.",
+                choices: [
+                    { text: "Return to the crossroads", nextPassage: "keep_exploring" }
+                ]
+            },
+            arch_echo: {
+                text: "You approach the broken arch. Ancient symbols are carved into its weathered surface.\n\nAs you trace them with your finger, you feel a resonance with the emblem on your chest.\n\nThe arch begins to glow faintly, responding to your touch.",
+                choices: [
+                    { text: "Press the emblem on your chest against the arch", nextPassage: "press_emblem_arch" },
+                    { text: "Step back", nextPassage: "step_back" }
+                ]
+            },
+            press_emblem_arch: {
+                text: "A sudden flash of light. Images pour into your mind:\n\nA bustling city square. Towering spires. People with glowing symbols on their chests.\n\nThen darkness falls. Screams. A great machine beneath the city pulses erratically.\n\nYou stumble back, overwhelmed by the vision.\n\nThe arch stands silent again, its secret shared.",
+                isEcho: true,
+                echoId: "arch_vision",
+                echoName: "Arch Vision",
+                echoDescription: "A fragment revealing the city's final moments, preserved in the ancient stone of the arch.",
+                choices: [
+                    { text: "Continue exploring", nextPassage: "keep_exploring" }
+                ]
+            },
+            step_back: {
+                text: "You withdraw your hand. The glow fades.\n\nSome memories might be too painful to restore.",
+                choices: [
+                    { text: "Return to the junction", nextPassage: "keep_exploring" }
+                ]
+            },
+            follow_sound: {
+                text: "You follow the dripping sound deeper into the cavern.\n\nThe walls begin to whisper as you pass. Not in words, but in memory.\n\nYou come to a vast underground lake, its surface perfectly still.\n\nIn the center, something rises from the water.",
+                choices: [
+                    { text: "Wade into the water", nextPassage: "underwater_chamber" },
+                    { text: "Return to the entrance", nextPassage: "back_to_cavern" }
+                ]
+            },
+            touch_walls: {
+                text: "You place your hand against the damp stone.\n\nThe cavern shudders. Not physically, but in time.\n\nEchoes of conversations, footsteps, prayers resonate through your fingers.\n\nThese walls remember what walked within them.",
+                isEcho: true,
+                echoId: "cavern_whispers",
+                echoName: "Cavern Whispers",
+                echoDescription: "The stone remembers those who passed through these halls, their words etched in the dampness.",
+                choices: [
+                    { text: "Follow the dripping sound", nextPassage: "follow_sound" },
+                    { text: "Return to the entrance", nextPassage: "back_to_cavern" }
+                ]
+            },
+            back_to_cavern: {
+                text: "You make your way back to the cavern entrance.",
+                choices: [
+                    { text: "Return to the surface", nextPassage: "keep_exploring" }
+                ]
+            },
+            underwater_chamber: {
+                text: "The pool's surface reflects your face—or what would be your face if your hood wasn't obscuring it.\n\nSomething glints beneath the water. A mask, perhaps, with no features.",
+                choices: [
+                    { text: "Reach for the mask", nextPassage: "reach_mask" },
+                    { text: "Leave it be", nextPassage: "leave_mask" }
+                ]
+            },
+            reach_mask: {
+                text: "You reach into the cold water and retrieve the mask.\n\nIt's featureless, smooth as glass, but you sense it's important.\n\nThe mask seems to hum in your hands, resonating with the emblem on your chest.\n\nYou feel it belongs with you, though you can't explain why.",
+                isEcho: true,
+                echoId: "faceless_mask",
+                echoName: "Faceless Mask",
+                echoDescription: "A smooth, featureless mask. It seems to wait for an identity to imprint upon it.",
+                choices: [
+                    { text: "Return to the surface", nextPassage: "ending" }
+                ]
+            },
+            leave_mask: {
+                text: "You draw back. Some artifacts are not meant to be disturbed.\n\nThe reflection ripples and settles again.",
+                choices: [
+                    { text: "Return to the cavern entrance", nextPassage: "back_to_cavern" }
+                ]
+            },
+            ghost_garden_entry: {
+                text: "You step into the garden. Plants phase in and out of existence around you.\n\nIn the center stands a tall, still figure. It doesn't move, but you sense it's watching you.",
+                choices: [
+                    { text: "Approach the figure", nextPassage: "approach_figure" },
+                    { text: "Explore the garden", nextPassage: "explore_garden" }
+                ]
+            },
+            approach_figure: {
+                text: "As you approach, the figure remains motionless.\n\nIt wears a cloak similar to yours, but its face is obscured by a featureless mask.\n\nThis must be the Silent Watcher mentioned in the echoes.",
+                choices: [
+                    { text: "Continue", nextPassage: "ending" }
+                ]
+            },
+            explore_garden: {
+                text: "You decide to explore the unstable garden first.\n\nPlants bloom and wither as you pass, their lifecycle compressed into moments.\n\nYou find an echo trapped in the heart of a flower that exists only in memory.\n\nThe echo pulses in rhythm with your emblem.\n\nYou've collected another fragment of this world's past.",
+                isEcho: true,
+                echoId: "garden_flower",
+                echoName: "Memory Flower",
+                echoDescription: "A temporal anomaly in the form of a flower, blooming and withering in moments, preserving a fragment of the garden's beauty.",
+                choices: [
+                    { text: "Approach the Silent Watcher now", nextPassage: "approach_figure" }
+                ]
+            },
+            ending: {
+                text: "This is as far as the demo version goes. In the full experience, your journey would continue:\n\n- You would meet The Silent Watcher and learn more about your connection to this world\n\n- You would discover the Memory Core beneath the city\n\n- You would make choices that determine the fate of the echoes you've collected\n\nThank you for experiencing Echoes of the Past.",
+                choices: [
+                    { text: "Restart Demo", nextPassage: "restart" }
+                ]
             }
-        });
+        };
+        
+        // Echo data with descriptions and image placeholders
+        const echoData = {
+            shrine_shard: {
+                name: "Shrine Shard",
+                description: "A fragment of crystallized memory, pulsing with the heartbeat of a forgotten ritual.",
+                location: "City Ruins - Shrine",
+                image: "echoes/shrine_shard.jpg" // This will be replaced with the actual image path
+            },
+            arch_vision: {
+                name: "Arch Vision",
+                description: "A fragment revealing the city's final moments, preserved in the ancient stone of the arch.",
+                location: "City Ruins - Arch",
+                image: "echoes/arch_vision.jpg" // This will be replaced with the actual image path
+            },
+            cavern_whispers: {
+                name: "Cavern Whispers",
+                description: "The stone remembers those who passed through these halls, their words etched in the dampness.",
+                location: "Whisper Caverns",
+                image: "echoes/cavern_whispers.jpg" // This will be replaced with the actual image path
+            },
+            faceless_mask: {
+                name: "Faceless Mask",
+                description: "A smooth, featureless mask. It seems to wait for an identity to imprint upon it.",
+                location: "Underwater Chamber",
+                image: "echoes/faceless_mask.jpg" // This will be replaced with the actual image path
+            },
+            garden_flower: {
+                name: "Memory Flower",
+                description: "A temporal anomaly in the form of a flower, blooming and withering in moments, preserving a fragment of the garden's beauty.",
+                location: "Ghost Garden",
+                image: "echoes/garden_flower.jpg" // This will be replaced with the actual image path
+            }
+        };
+        
+        // Location data for map and images
+        const locationData = {
+            city_ruins: {
+                name: "City Ruins",
+                description: "The crumbling remnants of a once-great civilization.",
+                mapPosition: { x: 50, y: 30 },
+                image: "locations/city_ruins.jpg"
+            },
+            shrine: {
+                name: "Forgotten Shrine",
+                description: "A sacred place, now shattered and abandoned.",
+                mapPosition: { x: 70, y: 40 },
+                image: "locations/shrine.jpg"
+            },
+            arch: {
+                name: "Memory Arch",
+                description: "Ancient stone that remembers the final days.",
+                mapPosition: { x: 40, y: 45 },
+                image: "locations/arch.jpg"
+            },
+            whisper_caverns: {
+                name: "Whisper Caverns",
+                description: "Tunnels where echoes of the past still linger.",
+                mapPosition: { x: 25, y: 60 },
+                image: "locations/whisper_caverns.jpg"
+            },
+            underwater_chamber: {
+                name: "Underwater Chamber",
+                description: "A sacred pool hiding ancient artifacts.",
+                mapPosition: { x: 20, y: 80 },
+                image: "locations/underwater_chamber.jpg"
+            },
+            memory_gate: {
+                name: "Memory Gate",
+                description: "A barrier that responds only to those it recognizes.",
+                mapPosition: { x: 75, y: 55 },
+                image: "locations/memory_gate.jpg"
+            },
+            ghost_garden: {
+                name: "Ghost Garden",
+                description: "Plants that flicker between existence and memory.",
+                mapPosition: { x: 85, y: 70 },
+                image: "locations/ghost_garden.jpg"
+            }
+        };
+        
+        // State
+        let currentPassage = "start";
+        let echoesFound = [];
+        let collectionVisible = false;
+        let mapVisible = false;
+        let menuVisible = false;
+        let discoveredLocations = ["city_ruins"]; // Start with first location discovered
+        let currentLocation = "city_ruins";
+        
+        // DOM Elements
+        const beginButton = document.getElementById('begin-button');
+        const startGameDiv = document.getElementById('start-game');
+        const storyContainer = document.getElementById('story-container');
+        const choicesContainer = document.getElementById('choices-container');
+        const echoToggle = document.getElementById('echo-toggle');
+        const echoCollection = document.getElementById('echo-collection');
+        const echoList = document.getElementById('echo-list');
+        const mapToggle = document.getElementById('map-toggle');
+        const mapPanel = document.getElementById('map-panel');
+        const mapContainer = document.querySelector('.map-container');
+        const menuToggle = document.getElementById('menu-toggle');
+        const menuPanel = document.getElementById('menu-panel');
+        const restartButton = document.getElementById('restart-button');
+        const instructionsButton = document.getElementById('instructions-button');
+        const simplifiedButton = document.getElementById('simplified-button');
+        
+        // Initialize
+        beginButton.addEventListener('click', startGame);
+        echoToggle.addEventListener('click', toggleEchoCollection);
+        mapToggle.addEventListener('click', toggleMap);
+        menuToggle.addEventListener('click', toggleMenu);
+        restartButton.addEventListener('click', () => location.reload());
+        instructionsButton.addEventListener('click', showInstructions);
+        simplifiedButton.addEventListener('click', () => window.location.href = 'simplified.html');
+        
+        function startGame() {
+            // Hide start button
+            startGameDiv.style.display = 'none';
+            
+            // Show toggle buttons
+            echoToggle.style.display = 'block';
+            mapToggle.style.display = 'block';
+            menuToggle.style.display = 'block';
+            
+            // Start the story
+            showPassage(currentPassage);
+        }
+        
+        function showPassage(passageId) {
+            try {
+                // Get passage data
+                const passage = storyContent[passageId];
+                if (!passage) {
+                    throw new Error(`Passage "${passageId}" not found`);
+                }
+                
+                // Create story fragment
+                const fragment = document.createElement('div');
+                fragment.className = 'story-fragment';
+                
+                // Add text
+                const paragraphs = passage.text.split('\n\n');
+                paragraphs.forEach(paragraph => {
+                    if (paragraph.trim() === '') return;
+                    
+                    const p = document.createElement('p');
+                    p.innerHTML = paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    fragment.appendChild(p);
+                });
+                
+                // Update current location based on passage
+                updateCurrentLocation(passageId);
+                
+                // Add location image if available
+                if (shouldShowLocationImage(passageId)) {
+                    const locationKey = getLocationKeyForPassage(passageId);
+                    if (locationKey && locationData[locationKey]) {
+                        const location = locationData[locationKey];
+                        
+                        // Create image container
+                        const imageContainer = document.createElement('div');
+                        imageContainer.className = 'location-image-container';
+                        
+                        // Create image placeholder
+                        const imagePlaceholder = document.createElement('div');
+                        imagePlaceholder.className = 'location-image-placeholder';
+                        imagePlaceholder.textContent = `${location.name}`;
+                        imageContainer.appendChild(imagePlaceholder);
+                        
+                        // Add to fragment
+                        fragment.appendChild(imageContainer);
+                    }
+                }
+                
+                // Add to container
+                storyContainer.appendChild(fragment);
+                
+                // Check if passage has an echo to collect
+                if (passage.isEcho && passage.echoId) {
+                    if (!echoesFound.includes(passage.echoId)) {
+                        // Add echo to collection
+                        echoesFound.push(passage.echoId);
+                        
+                        // Add echo image if applicable
+                        if (echoData[passage.echoId]) {
+                            // Create image container
+                            const imageContainer = document.createElement('div');
+                            imageContainer.className = 'fragment-image-container';
+                            
+                            // Show placeholder/image
+                            // If image file exists, use it, otherwise show placeholder
+                            const imagePlaceholder = document.createElement('div');
+                            imagePlaceholder.className = 'echo-placeholder';
+                            imagePlaceholder.textContent = 'Echo Fragment Image';
+                            imageContainer.appendChild(imagePlaceholder);
+                            
+                            // Add image container to the fragment
+                            fragment.appendChild(imageContainer);
+                        }
+                        
+                        // Add collection notification
+                        const echoNotice = document.createElement('p');
+                        echoNotice.innerHTML = `<strong>Echo fragment collected: ${passage.echoName} (${echoesFound.length}/5)</strong>`;
+                        echoNotice.style.color = '#4caf50';
+                        fragment.appendChild(echoNotice);
+                        
+                        // Update the collection panel
+                        updateEchoCollection();
+                    }
+                }
+                
+                // Show choices
+                showChoices(passage.choices);
+                
+                // Update current passage
+                currentPassage = passageId;
+                
+                // Scroll to bottom
+                storyContainer.scrollTop = storyContainer.scrollHeight;
+                
+                // Add echo count to ending
+                if (passageId === 'ending') {
+                    const echoSummary = document.createElement('p');
+                    echoSummary.style.marginTop = '20px';
+                    echoSummary.style.fontStyle = 'italic';
+                    echoSummary.textContent = `You found ${echoesFound.length} out of 5 possible echo fragments.`;
+                    fragment.appendChild(echoSummary);
+                }
+                
+                // Update map
+                updateMap();
+                
+            } catch (error) {
+                console.error('Error showing passage:', error);
+                showError(`Something went wrong: ${error.message}`);
+            }
+        }
+        
+        function showChoices(choices) {
+            // Clear existing choices
+            choicesContainer.innerHTML = '';
+            
+            if (choices.length === 0) return;
+            
+            // Special case for restart
+            if (choices.length === 1 && choices[0].nextPassage === 'restart') {
+                const restartButton = document.createElement('button');
+                restartButton.className = 'begin-button';
+                restartButton.textContent = choices[0].text;
+                restartButton.addEventListener('click', () => location.reload());
+                choicesContainer.appendChild(restartButton);
+                return;
+            }
+            
+            // Create choices list
+            const choicesList = document.createElement('ul');
+            choicesList.className = 'choices-list';
+            
+            // Add each choice
+            choices.forEach((choice, index) => {
+                const choiceItem = document.createElement('li');
+                choiceItem.className = 'choice';
+                choiceItem.innerHTML = `<span class="choice-number">${index + 1}</span> ${choice.text}`;
+                
+                choiceItem.addEventListener('click', () => {
+                    makeChoice(choice, index);
+                });
+                
+                choicesList.appendChild(choiceItem);
+            });
+            
+            choicesContainer.appendChild(choicesList);
+            
+            // Add keyboard listeners
+            document.addEventListener('keydown', handleKeyChoice);
+        }
+        
+        function handleKeyChoice(event) {
+            if (event.key >= '1' && event.key <= '9') {
+                const index = parseInt(event.key) - 1;
+                const choices = storyContent[currentPassage].choices;
+                
+                if (index < choices.length) {
+                    makeChoice(choices[index], index);
+                }
+            }
+        }
+        
+        function makeChoice(choice, index) {
+            // Remove keyboard listener
+            document.removeEventListener('keydown', handleKeyChoice);
+            
+            // Record the choice
+            const choiceRecord = document.createElement('div');
+            choiceRecord.className = 'player-choice';
+            choiceRecord.textContent = choice.text;
+            storyContainer.appendChild(choiceRecord);
+            
+            // Show next passage
+            showPassage(choice.nextPassage);
+        }
+        
+        function showError(message) {
+            const errorElement = document.createElement('div');
+            errorElement.className = 'error-message';
+            errorElement.innerHTML = `<p>${message}</p>
+                <p>You can try reloading the page, or <a href="simplified.html" style="color: #4caf50;">clicking here to try the simplified version</a>.</p>`;
+            storyContainer.appendChild(errorElement);
+        }
+        
+        function toggleEchoCollection() {
+            collectionVisible = !collectionVisible;
+            echoCollection.style.display = collectionVisible ? 'block' : 'none';
+            
+            // Close other panels
+            if (collectionVisible) {
+                mapVisible = false;
+                mapPanel.style.display = 'none';
+                menuVisible = false;
+                menuPanel.style.display = 'none';
+            }
+        }
+        
+        function toggleMap() {
+            mapVisible = !mapVisible;
+            mapPanel.style.display = mapVisible ? 'block' : 'none';
+            
+            // Close other panels
+            if (mapVisible) {
+                collectionVisible = false;
+                echoCollection.style.display = 'none';
+                menuVisible = false;
+                menuPanel.style.display = 'none';
+            }
+        }
+        
+        function toggleMenu() {
+            menuVisible = !menuVisible;
+            menuPanel.style.display = menuVisible ? 'block' : 'none';
+            
+            // Close other panels
+            if (menuVisible) {
+                collectionVisible = false;
+                echoCollection.style.display = 'none';
+                mapVisible = false;
+                mapPanel.style.display = 'none';
+            }
+        }
+        
+        function showInstructions() {
+            // Create modal or display instructions
+            alert("Click on choices to progress through the story.\n\nYou can use number keys (1-9) to select choices.\n\nCollect all echo fragments to unravel the mystery of this world.");
+        }
+        
+        function updateEchoCollection() {
+            // Clear existing content
+            echoList.innerHTML = '';
+            
+            // If no echoes found, show empty message
+            if (echoesFound.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'empty-collection';
+                emptyMessage.textContent = 'No echoes collected yet...';
+                echoList.appendChild(emptyMessage);
+                return;
+            }
+            
+            // Add each echo to the collection
+            echoesFound.forEach(echoId => {
+                const echoInfo = echoData[echoId];
+                
+                if (!echoInfo) return; // Skip if no data
+                
+                const echoElement = document.createElement('div');
+                echoElement.className = 'echo-item';
+                
+                // Add title
+                const title = document.createElement('h4');
+                title.textContent = echoInfo.name;
+                echoElement.appendChild(title);
+                
+                // Add location
+                const location = document.createElement('p');
+                location.innerHTML = `<em>Found in: ${echoInfo.location}</em>`;
+                echoElement.appendChild(location);
+                
+                // Add image placeholder
+                const imagePlaceholder = document.createElement('div');
+                imagePlaceholder.className = 'echo-placeholder';
+                imagePlaceholder.textContent = 'Echo Image';
+                echoElement.appendChild(imagePlaceholder);
+                
+                // Add description
+                const description = document.createElement('p');
+                description.textContent = echoInfo.description;
+                echoElement.appendChild(description);
+                
+                echoList.appendChild(echoElement);
+            });
+        }
+        
+        function updateCurrentLocation(passageId) {
+            // Map passage IDs to location keys
+            const locationMapping = {
+                'start': 'city_ruins',
+                'look_around': 'city_ruins',
+                'walk_forward': 'city_ruins',
+                'keep_exploring': 'city_ruins',
+                'first_choice': 'shrine',
+                'investigate_glimmer': 'shrine',
+                'leave_alone': 'shrine',
+                'whisper_caverns': 'whisper_caverns',
+                'memory_gate': 'memory_gate',
+                'press_emblem_gate': 'memory_gate',
+                'try_another_path': 'city_ruins',
+                'arch_echo': 'arch',
+                'press_emblem_arch': 'arch',
+                'step_back': 'arch',
+                'follow_sound': 'whisper_caverns',
+                'touch_walls': 'whisper_caverns',
+                'back_to_cavern': 'whisper_caverns',
+                'underwater_chamber': 'underwater_chamber',
+                'reach_mask': 'underwater_chamber',
+                'leave_mask': 'underwater_chamber',
+                'ghost_garden_entry': 'ghost_garden',
+                'approach_figure': 'ghost_garden',
+                'explore_garden': 'ghost_garden'
+            };
+            
+            if (locationMapping[passageId]) {
+                currentLocation = locationMapping[passageId];
+                
+                // Add to discovered locations if not already there
+                if (!discoveredLocations.includes(currentLocation)) {
+                    discoveredLocations.push(currentLocation);
+                }
+            }
+        }
+        
+        function getLocationKeyForPassage(passageId) {
+            // Map certain key passages to locations that should show images
+            const keyLocationMapping = {
+                'memory_gate': 'memory_gate',
+                'press_emblem_gate': 'memory_gate',
+                'underwater_chamber': 'underwater_chamber',
+                'reach_mask': 'underwater_chamber',
+                'ghost_garden_entry': 'ghost_garden',
+                'approach_figure': 'ghost_garden'
+            };
+            
+            return keyLocationMapping[passageId] || null;
+        }
+        
+        function shouldShowLocationImage(passageId) {
+            // Only show location images at certain key moments
+            return getLocationKeyForPassage(passageId) !== null;
+        }
+        
+        function updateMap() {
+            // Clear existing map markers
+            const existingMarkers = mapContainer.querySelectorAll('.map-location');
+            existingMarkers.forEach(marker => marker.remove());
+            
+            // Remove placeholder if we have discovered locations
+            if (discoveredLocations.length > 0) {
+                const placeholder = mapContainer.querySelector('.map-placeholder');
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+            }
+            
+            // Add markers for discovered locations
+            discoveredLocations.forEach(locationKey => {
+                const location = locationData[locationKey];
+                if (location && location.mapPosition) {
+                    const marker = document.createElement('div');
+                    marker.className = 'map-location';
+                    if (locationKey === currentLocation) {
+                        marker.classList.add('current');
+                    }
+                    
+                    marker.style.left = `${location.mapPosition.x}%`;
+                    marker.style.top = `${location.mapPosition.y}%`;
+                    
+                    // Add tooltip with location name
+                    marker.title = location.name;
+                    
+                    mapContainer.appendChild(marker);
+                }
+            });
+        }
     </script>
 </body>
 </html>

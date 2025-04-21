@@ -1,0 +1,186 @@
+@font-face {
+  font-family: 'PixelatedElegance';
+  src: url('./fonts/PixelatedElegance.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #000;
+  color: #f0f0f0;
+  font-family: "Georgia", serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('./images/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Game Container */
+.game-container {
+  max-width: 900px;
+  width: 90%;
+  padding: 20px;
+  position: relative;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  margin: 50px auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Header Styles */
+.game-header {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 10;
+}
+
+.game-title {
+  font-size: 36px;
+  margin-bottom: 10px;
+  font-family: 'PixelatedElegance', "Times New Roman", serif;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px rgba(155, 155, 255, 0.7);
+}
+
+.game-subtitle {
+  font-size: 18px;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* Instructions */
+.instructions {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border-left: 3px solid #4caf50;
+}
+
+/* Start Game Button */
+#start-game {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.begin-button {
+  background-color: rgba(50, 50, 70, 0.8);
+  color: #f0f0f0;
+  border: 2px solid #4caf50;
+  padding: 12px 30px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+  font-family: "Georgia", serif;
+}
+
+.begin-button:hover {
+  background-color: rgba(70, 70, 100, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Story Container */
+#story-container {
+  width: 100%;
+  min-height: 300px;
+}
+
+#story-content {
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.story-fragment {
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.player-choice {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: rgba(50, 50, 100, 0.3);
+  border-left: 3px solid #4caf50;
+  border-radius: 5px;
+  font-style: italic;
+}
+
+/* Choices Container */
+#choices-container {
+  margin-top: 20px;
+}
+
+.choices-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.choice {
+  margin: 10px 0;
+  padding: 12px 15px;
+  background-color: rgba(40, 40, 60, 0.8);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.choice:hover {
+  background-color: rgba(60, 60, 90, 0.9);
+  transform: translateX(5px);
+}
+
+.choice-number {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  background-color: rgba(70, 70, 120, 0.8);
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.story-end {
+  text-align: center;
+  font-size: 24px;
+  margin: 30px 0;
+  text-shadow: 0 0 10px rgba(155, 155, 255, 0.7);
+}
+
+/* Echo Journal */
+#echo-journal {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  border: 1px solid #4caf50;
+}
+
+.echo-count {
+  color: #aaffaa;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+} 

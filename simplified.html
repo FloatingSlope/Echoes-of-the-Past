@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of the Past - Simplified Version</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #111;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 36px;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-style: italic;
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+        
+        .story-section {
+            background-color: rgba(30, 30, 30, 0.8);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .choice-button {
+            display: block;
+            width: 100%;
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 12px 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: left;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .choice-button:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+            transform: translateY(-2px);
+        }
+        
+        .player-choice {
+            background-color: rgba(80, 80, 100, 0.6);
+            border-left: 4px solid #4caf50;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        .restart-button {
+            display: block;
+            margin: 20px auto;
+            background-color: rgba(60, 60, 90, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .error-message {
+            background-color: rgba(255, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .loading-indicator {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .error-recovery {
+            background-color: rgba(100, 100, 100, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        
+        .location-indicator {
+            font-size: 0.9em;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        
+        strong {
+            color: #4caf50;
+        }
+        
+        /* Echo Collection Toggle */
+        .echo-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 100;
+        }
+        
+        .echo-toggle:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+        }
+        
+        /* Map Button */
+        .map-toggle {
+            position: fixed;
+            top: 20px;
+            left: 120px;
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 100;
+        }
+        
+        .map-toggle:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+        }
+        
+        /* Menu Button */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 100;
+        }
+        
+        .menu-toggle:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+        }
+        
+        /* Echo Collection Panel */
+        .echo-collection {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            width: 250px;
+            background-color: rgba(20, 20, 30, 0.95);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            z-index: 99;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .echo-collection h3 {
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .echo-item {
+            margin-bottom: 20px;
+            background-color: rgba(40, 40, 60, 0.6);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .echo-item h4 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        
+        .echo-item p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .echo-placeholder {
+            text-align: center;
+            border: 2px dashed #333;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        
+        .echo-image {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .empty-collection {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+            padding: 30px 0;
+        }
+        
+        /* Map Panel */
+        .map-panel {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            width: 400px;
+            background-color: rgba(20, 20, 30, 0.95);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            z-index: 99;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .map-panel h3 {
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .map-container {
+            position: relative;
+            height: 300px;
+            border: 1px solid #333;
+            margin: 15px 0;
+            background-color: rgba(40, 40, 50, 0.7);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .map-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-style: italic;
+        }
+        
+        .map-location {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .map-location:hover {
+            width: 20px;
+            height: 20px;
+            background-color: #6abf6e;
+        }
+        
+        .map-location.current {
+            background-color: #ff9800;
+            box-shadow: 0 0 10px rgba(255, 152, 0, 0.7);
+        }
+        
+        .map-legend {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #ddd;
+        }
+        
+        .map-legend div {
+            margin-bottom: 5px;
+        }
+        
+        .map-legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .map-legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        /* Menu Panel */
+        .menu-panel {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            width: 250px;
+            background-color: rgba(20, 20, 30, 0.95);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            z-index: 99;
+            display: none;
+        }
+        
+        .menu-panel h3 {
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .menu-button {
+            display: block;
+            width: 100%;
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 12px 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .menu-button:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+        }
+        
+        /* Location Images */
+        .location-image-container {
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .location-image {
+            max-width: 100%;
+            max-height: 250px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .location-image-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: rgba(40, 40, 50, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-style: italic;
+        }
+        
+        /* Fragment image in the story */
+        .fragment-image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ECHOES OF THE PAST</h1>
+            <p class="subtitle">A journey through memory and time</p>
+        </header>
+        
+        <div id="story-container">
+            <!-- Story content will be dynamically inserted here -->
+            <div class="story-section">
+                <div class="location-indicator">RUINS ENTRANCE</div>
+                <p>You open your eyes, though you're not sure if they were ever closed.</p>
+                <p>The ground beneath you is cracked stone. Cold. Damp.</p>
+                <p>Above, a bloated moon clings to a colorless sky. Somewhere in the distance, something breathes—not with lungs, but with <strong>time</strong>.</p>
+                <p>You exhale. Or at least, you think you do.</p>
+                
+                <button class="choice-button" onclick="makeChoice('look_around')">Look around</button>
+                <button class="choice-button" onclick="makeChoice('walk_forward')">Walk forward</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Echo Collection Button and Panel -->
+    <button id="echo-toggle" class="echo-toggle">View Echoes</button>
+    <div id="echo-collection" class="echo-collection">
+        <h3>Echo Collection</h3>
+        <div id="echo-list">
+            <div class="empty-collection">No echoes collected yet...</div>
+        </div>
+    </div>
+    
+    <!-- Map Button and Panel -->
+    <button id="map-toggle" class="map-toggle">View Map</button>
+    <div id="map-panel" class="map-panel">
+        <h3>Discovered Locations</h3>
+        <div class="map-container">
+            <div class="map-placeholder">Map will appear as you discover locations...</div>
+            <!-- Map markers will be added here dynamically -->
+        </div>
+        <div class="map-legend">
+            <div class="map-legend-item">
+                <div class="map-legend-color" style="background-color: #4caf50;"></div>
+                <span>Discovered Location</span>
+            </div>
+            <div class="map-legend-item">
+                <div class="map-legend-color" style="background-color: #ff9800;"></div>
+                <span>Current Location</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Menu Button and Panel -->
+    <button id="menu-toggle" class="menu-toggle">Menu</button>
+    <div id="menu-panel" class="menu-panel">
+        <h3>Game Menu</h3>
+        <button id="restart-button" class="menu-button">Restart Game</button>
+        <button id="instructions-button" class="menu-button">Instructions</button>
+        <button id="standard-button" class="menu-button">Standard Version</button>
+    </div>
+    
+    <script>
+        // Simple story management system with error recovery
+        const storyContent = {
+            look_around: {
+                location: "CITY RUINS",
+                text: [
+                    "The city is crumbling, but there is a strange stillness.",
+                    "Blackened structures claw toward the sky, half-swallowed by fog.",
+                    "The only light comes from your chest — a soft, pulsing glow.",
+                    "It flickers, in rhythm with something beneath the world.",
+                    "You remember... nothing."
+                ],
+                choices: [
+                    { id: "keep_exploring", text: "Continue exploring" }
+                ]
+            },
+            walk_forward: {
+                location: "CITY RUINS",
+                text: [
+                    "The stones shift beneath your feet.",
+                    "Each step echoes longer than it should.",
+                    "In the distance, you hear a hum — not mechanical, but alive.",
+                    "Something waits to be seen."
+                ],
+                choices: [
+                    { id: "first_choice", text: "Move toward the sound" }
+                ]
+            },
+            keep_exploring: {
+                location: "CITY RUINS - CROSSROADS",
+                text: [
+                    "The road narrows. The air tightens.",
+                    "You walk toward a broken arch, half-submerged in soil and time.",
+                    "To your left, a path descends into shadow.",
+                    "To your right, something flickers behind a rusted gate."
+                ],
+                choices: [
+                    { id: "whisper_caverns", text: "Take the left path" },
+                    { id: "memory_gate", text: "Approach the gate" },
+                    { id: "arch_echo", text: "Examine the arch" }
+                ]
+            },
+            first_choice: {
+                location: "CITY RUINS - SHRINE",
+                text: [
+                    "You pass the remnants of what may have been a shrine.",
+                    "Shattered beams. Crushed stone.",
+                    "Something catches your eye — a glimmer beneath the rubble.",
+                    "It pulses like your own chest does. But slower. Older."
+                ],
+                choices: [
+                    { id: "investigate_glimmer", text: "Investigate the glimmer" },
+                    { id: "leave_alone", text: "Leave it alone" }
+                ]
+            },
+            investigate_glimmer: {
+                location: "CITY RUINS - SHRINE",
+                text: [
+                    "You brush aside the debris and reveal a glowing shard.",
+                    "It pulses gently in your hand.",
+                    "It is warm. Familiar.",
+                    "You don't remember what it is—but it remembers you.",
+                    "The glowing shard fades after a moment, but something has changed in you.",
+                    "The emblem on your chest pulses slightly stronger now."
+                ],
+                isEcho: true,
+                echoId: "shrine_shard",
+                echoName: "Shrine Shard",
+                echoDescription: "A fragment of crystallized memory, pulsing with the heartbeat of a forgotten ritual.",
+                choices: [
+                    { id: "keep_exploring", text: "Continue" }
+                ]
+            },
+            leave_alone: {
+                location: "CITY RUINS - SHRINE",
+                text: [
+                    "You step away.",
+                    "Some things are better left buried.",
+                    "The light dims behind you."
+                ],
+                choices: [
+                    { id: "keep_exploring", text: "Continue" }
+                ]
+            },
+            whisper_caverns: {
+                location: "WHISPER CAVERNS - ENTRANCE",
+                text: [
+                    "You descend slowly, your light barely touching the walls.",
+                    "The echo follows.",
+                    "You find yourself in a cavern not carved by hands, but by forgetting.",
+                    "The walls breathe. Somewhere, water drips.",
+                    "It sounds almost like a voice."
+                ],
+                choices: [
+                    { id: "follow_sound", text: "Follow the sound" },
+                    { id: "touch_walls", text: "Touch the walls" }
+                ]
+            },
+            memory_gate: {
+                location: "MEMORY GATE",
+                text: [
+                    "The gate resists you at first.",
+                    "But the moment you place your hand on it, the hum returns—louder.",
+                    "This gate remembers.",
+                    "There is no key, only recognition.",
+                    "A glyph glows on its frame—the same one on your chest."
+                ],
+                choices: [
+                    { id: "press_emblem_gate", text: "Press your emblem against the gate" },
+                    { id: "try_another_path", text: "Try another path" }
+                ]
+            },
+            press_emblem_gate: {
+                location: "MEMORY GATE",
+                text: [
+                    "The gate shudders and begins to open, revealing a garden beyond.",
+                    "But something isn't right. The plants flicker in and out of existence, unstable memories of what once grew here."
+                ],
+                choices: [
+                    { id: "ghost_garden_entry", text: "Enter the garden" }
+                ]
+            },
+            try_another_path: {
+                location: "CITY RUINS",
+                text: [
+                    "You decide to explore elsewhere first."
+                ],
+                choices: [
+                    { id: "keep_exploring", text: "Return to the crossroads" }
+                ]
+            },
+            arch_echo: {
+                location: "CITY RUINS - ARCH",
+                text: [
+                    "You approach the broken arch. Ancient symbols are carved into its weathered surface.",
+                    "As you trace them with your finger, you feel a resonance with the emblem on your chest.",
+                    "The arch begins to glow faintly, responding to your touch."
+                ],
+                choices: [
+                    { id: "press_emblem_arch", text: "Press the emblem on your chest against the arch" },
+                    { id: "step_back", text: "Step back" }
+                ]
+            },
+            press_emblem_arch: {
+                location: "CITY RUINS - ARCH",
+                text: [
+                    "A sudden flash of light. Images pour into your mind:",
+                    "A bustling city square. Towering spires. People with glowing symbols on their chests.",
+                    "Then darkness falls. Screams. A great machine beneath the city pulses erratically.",
+                    "You stumble back, overwhelmed by the vision.",
+                    "The arch stands silent again, its secret shared."
+                ],
+                isEcho: true,
+                echoId: "arch_vision",
+                echoName: "Arch Vision",
+                echoDescription: "A fragment revealing the city's final moments, preserved in the ancient stone of the arch.",
+                choices: [
+                    { id: "keep_exploring", text: "Continue exploring" }
+                ]
+            },
+            step_back: {
+                location: "CITY RUINS - ARCH",
+                text: [
+                    "You withdraw your hand. The glow fades.",
+                    "Some memories might be too painful to restore."
+                ],
+                choices: [
+                    { id: "keep_exploring", text: "Return to the junction" }
+                ]
+            },
+            follow_sound: {
+                location: "WHISPER CAVERNS - DEEPER PASSAGE",
+                text: [
+                    "You follow the dripping sound deeper into the cavern.",
+                    "The walls begin to whisper as you pass. Not in words, but in memory.",
+                    "You come to a vast underground lake, its surface perfectly still.",
+                    "In the center, something rises from the water."
+                ],
+                choices: [
+                    { id: "underwater_chamber", text: "Wade into the water" },
+                    { id: "back_to_cavern", text: "Return to the entrance" }
+                ]
+            },
+            touch_walls: {
+                location: "WHISPER CAVERNS",
+                text: [
+                    "You place your hand against the damp stone.",
+                    "The cavern shudders. Not physically, but in time.",
+                    "Echoes of conversations, footsteps, prayers resonate through your fingers.",
+                    "These walls remember what walked within them."
+                ],
+                isEcho: true,
+                echoId: "cavern_whispers",
+                echoName: "Cavern Whispers",
+                echoDescription: "The stone remembers those who passed through these halls, their words etched in the dampness.",
+                choices: [
+                    { id: "follow_sound", text: "Follow the dripping sound" },
+                    { id: "back_to_cavern", text: "Return to the entrance" }
+                ]
+            },
+            back_to_cavern: {
+                location: "WHISPER CAVERNS - ENTRANCE",
+                text: [
+                    "You make your way back to the cavern entrance."
+                ],
+                choices: [
+                    { id: "keep_exploring", text: "Return to the surface" }
+                ]
+            },
+            underwater_chamber: {
+                location: "WHISPER CAVERNS - UNDERWATER CHAMBER",
+                text: [
+                    "The pool's surface reflects your face—or what would be your face if your hood wasn't obscuring it.",
+                    "Something glints beneath the water. A mask, perhaps, with no features."
+                ],
+                choices: [
+                    { id: "reach_mask", text: "Reach for the mask" },
+                    { id: "leave_mask", text: "Leave it be" }
+                ]
+            },
+            reach_mask: {
+                location: "WHISPER CAVERNS - UNDERWATER CHAMBER",
+                text: [
+                    "You reach into the cold water and retrieve the mask.",
+                    "It's featureless, smooth as glass, but you sense it's important.",
+                    "The mask seems to hum in your hands, resonating with the emblem on your chest.",
+                    "You feel it belongs with you, though you can't explain why."
+                ],
+                isEcho: true,
+                echoId: "faceless_mask",
+                echoName: "Faceless Mask",
+                echoDescription: "A smooth, featureless mask. It seems to wait for an identity to imprint upon it.",
+                choices: [
+                    { id: "return_to_surface", text: "Return to the surface" }
+                ]
+            },
+            leave_mask: {
+                location: "WHISPER CAVERNS - UNDERWATER CHAMBER",
+                text: [
+                    "You draw back. Some artifacts are not meant to be disturbed.",
+                    "The reflection ripples and settles again."
+                ],
+                choices: [
+                    { id: "back_to_cavern", text: "Return to the cavern entrance" }
+                ]
+            },
+            return_to_surface: {
+                location: "CITY RUINS",
+                text: [
+                    "You make your way back through the cavern and up to the surface."
+                ],
+                choices: [
+                    { id: "demo_ending", text: "Continue" }
+                ]
+            },
+            ghost_garden_entry: {
+                location: "GHOST GARDEN",
+                text: [
+                    "You step into the garden. Plants phase in and out of existence around you.",
+                    "In the center stands a tall, still figure. It doesn't move, but you sense it's watching you."
+                ],
+                choices: [
+                    { id: "approach_figure", text: "Approach the figure" },
+                    { id: "explore_garden", text: "Explore the garden" }
+                ]
+            },
+            approach_figure: {
+                location: "GHOST GARDEN - CENTRAL AREA",
+                text: [
+                    "As you approach, the figure remains motionless.",
+                    "It wears a cloak similar to yours, but its face is obscured by a featureless mask.",
+                    "This must be the Silent Watcher mentioned in the echoes."
+                ],
+                choices: [
+                    { id: "demo_ending", text: "Continue" }
+                ]
+            },
+            explore_garden: {
+                location: "GHOST GARDEN - PERIPHERY",
+                text: [
+                    "You decide to explore the unstable garden first.",
+                    "Plants bloom and wither as you pass, their lifecycle compressed into moments.",
+                    "You find an echo trapped in the heart of a flower that exists only in memory.",
+                    "The echo pulses in rhythm with your emblem.",
+                    "You've collected another fragment of this world's past."
+                ],
+                isEcho: true,
+                echoId: "garden_flower",
+                echoName: "Memory Flower",
+                echoDescription: "A temporal anomaly in the form of a flower, blooming and withering in moments, preserving a fragment of the garden's beauty.",
+                choices: [
+                    { id: "approach_figure", text: "Approach the Silent Watcher now" }
+                ]
+            },
+            demo_ending: {
+                location: "DEMO CONCLUSION",
+                text: [
+                    "This is as far as the demo version goes. In the full experience, your journey would continue:",
+                    "- You would meet The Silent Watcher and learn more about your connection to this world",
+                    "- You would discover the Memory Core beneath the city",
+                    "- You would make choices that determine the fate of the echoes you've collected",
+                    "Thank you for experiencing Echoes of the Past."
+                ],
+                choices: [
+                    { id: "restart", text: "Restart Demo" }
+                ]
+            }
+        };
+        
+        // Echo data with descriptions and image placeholders
+        const echoData = {
+            shrine_shard: {
+                name: "Shrine Shard",
+                description: "A fragment of crystallized memory, pulsing with the heartbeat of a forgotten ritual.",
+                location: "City Ruins - Shrine",
+                image: "echoes/shrine_shard.jpg" // This will be replaced with the actual image path
+            },
+            arch_vision: {
+                name: "Arch Vision",
+                description: "A fragment revealing the city's final moments, preserved in the ancient stone of the arch.",
+                location: "City Ruins - Arch",
+                image: "echoes/arch_vision.jpg" // This will be replaced with the actual image path
+            },
+            cavern_whispers: {
+                name: "Cavern Whispers",
+                description: "The stone remembers those who passed through these halls, their words etched in the dampness.",
+                location: "Whisper Caverns",
+                image: "echoes/cavern_whispers.jpg" // This will be replaced with the actual image path
+            },
+            faceless_mask: {
+                name: "Faceless Mask",
+                description: "A smooth, featureless mask. It seems to wait for an identity to imprint upon it.",
+                location: "Underwater Chamber",
+                image: "echoes/faceless_mask.jpg" // This will be replaced with the actual image path
+            },
+            garden_flower: {
+                name: "Memory Flower",
+                description: "A temporal anomaly in the form of a flower, blooming and withering in moments, preserving a fragment of the garden's beauty.",
+                location: "Ghost Garden",
+                image: "echoes/garden_flower.jpg" // This will be replaced with the actual image path
+            }
+        };
+        
+        // Location data for map and images
+        const locationData = {
+            city_ruins: {
+                name: "City Ruins",
+                description: "The crumbling remnants of a once-great civilization.",
+                mapPosition: { x: 50, y: 30 },
+                image: "locations/city_ruins.jpg"
+            },
+            shrine: {
+                name: "Forgotten Shrine",
+                description: "A sacred place, now shattered and abandoned.",
+                mapPosition: { x: 70, y: 40 },
+                image: "locations/shrine.jpg"
+            },
+            arch: {
+                name: "Memory Arch",
+                description: "Ancient stone that remembers the final days.",
+                mapPosition: { x: 40, y: 45 },
+                image: "locations/arch.jpg"
+            },
+            whisper_caverns: {
+                name: "Whisper Caverns",
+                description: "Tunnels where echoes of the past still linger.",
+                mapPosition: { x: 25, y: 60 },
+                image: "locations/whisper_caverns.jpg"
+            },
+            underwater_chamber: {
+                name: "Underwater Chamber",
+                description: "A sacred pool hiding ancient artifacts.",
+                mapPosition: { x: 20, y: 80 },
+                image: "locations/underwater_chamber.jpg"
+            },
+            memory_gate: {
+                name: "Memory Gate",
+                description: "A barrier that responds only to those it recognizes.",
+                mapPosition: { x: 75, y: 55 },
+                image: "locations/memory_gate.jpg"
+            },
+            ghost_garden: {
+                name: "Ghost Garden",
+                description: "Plants that flicker between existence and memory.",
+                mapPosition: { x: 85, y: 70 },
+                image: "locations/ghost_garden.jpg"
+            }
+        };
+        
+        // Keep track of echo fragments found
+        let echoesFound = [];
+        let collectionVisible = false;
+        let mapVisible = false;
+        let menuVisible = false;
+        let discoveredLocations = ["city_ruins"]; // Start with first location discovered
+        let currentLocation = "city_ruins";
+        
+        // Set up echo collection toggle
+        const echoToggle = document.getElementById('echo-toggle');
+        const echoCollection = document.getElementById('echo-collection');
+        const echoList = document.getElementById('echo-list');
+        const mapToggle = document.getElementById('map-toggle');
+        const mapPanel = document.getElementById('map-panel');
+        const mapContainer = document.querySelector('.map-container');
+        const menuToggle = document.getElementById('menu-toggle');
+        const menuPanel = document.getElementById('menu-panel');
+        const restartButton = document.getElementById('restart-button');
+        const instructionsButton = document.getElementById('instructions-button');
+        const standardButton = document.getElementById('standard-button');
+        
+        echoToggle.addEventListener('click', toggleEchoCollection);
+        mapToggle.addEventListener('click', toggleMap);
+        menuToggle.addEventListener('click', toggleMenu);
+        restartButton.addEventListener('click', () => location.reload());
+        instructionsButton.addEventListener('click', showInstructions);
+        standardButton.addEventListener('click', () => window.location.href = 'index.html');
+        
+        function toggleEchoCollection() {
+            collectionVisible = !collectionVisible;
+            echoCollection.style.display = collectionVisible ? 'block' : 'none';
+            
+            // Close other panels
+            if (collectionVisible) {
+                mapVisible = false;
+                mapPanel.style.display = 'none';
+                menuVisible = false;
+                menuPanel.style.display = 'none';
+            }
+        }
+        
+        function toggleMap() {
+            mapVisible = !mapVisible;
+            mapPanel.style.display = mapVisible ? 'block' : 'none';
+            
+            // Close other panels
+            if (mapVisible) {
+                collectionVisible = false;
+                echoCollection.style.display = 'none';
+                menuVisible = false;
+                menuPanel.style.display = 'none';
+            }
+        }
+        
+        function toggleMenu() {
+            menuVisible = !menuVisible;
+            menuPanel.style.display = menuVisible ? 'block' : 'none';
+            
+            // Close other panels
+            if (menuVisible) {
+                collectionVisible = false;
+                echoCollection.style.display = 'none';
+                mapVisible = false;
+                mapPanel.style.display = 'none';
+            }
+        }
+        
+        function showInstructions() {
+            // Create modal or display instructions
+            alert("Click on choices to progress through the story. Collect all echo fragments to unravel the mystery of this world.");
+        }
+        
+        function updateEchoCollection() {
+            // Clear existing content
+            echoList.innerHTML = '';
+            
+            // If no echoes found, show empty message
+            if (echoesFound.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'empty-collection';
+                emptyMessage.textContent = 'No echoes collected yet...';
+                echoList.appendChild(emptyMessage);
+                return;
+            }
+            
+            // Add each echo to the collection
+            echoesFound.forEach(echoId => {
+                const echoInfo = echoData[echoId];
+                
+                if (!echoInfo) return; // Skip if no data
+                
+                const echoElement = document.createElement('div');
+                echoElement.className = 'echo-item';
+                
+                // Add title
+                const title = document.createElement('h4');
+                title.textContent = echoInfo.name;
+                echoElement.appendChild(title);
+                
+                // Add location
+                const location = document.createElement('p');
+                location.innerHTML = `<em>Found in: ${echoInfo.location}</em>`;
+                echoElement.appendChild(location);
+                
+                // Add image placeholder
+                const imagePlaceholder = document.createElement('div');
+                imagePlaceholder.className = 'echo-placeholder';
+                imagePlaceholder.textContent = 'Echo Image';
+                echoElement.appendChild(imagePlaceholder);
+                
+                // Add description
+                const description = document.createElement('p');
+                description.textContent = echoInfo.description;
+                echoElement.appendChild(description);
+                
+                echoList.appendChild(echoElement);
+            });
+        }
+        
+        function makeChoice(choiceId) {
+            // Add loading indicator
+            const storyContainer = document.getElementById('story-container');
+            const loadingIndicator = document.createElement('div');
+            loadingIndicator.className = 'loading-indicator';
+            loadingIndicator.textContent = 'Loading...';
+            storyContainer.appendChild(loadingIndicator);
+            
+            // Small delay to show loading and prevent browser freezing
+            setTimeout(() => {
+                // Remove loading indicator
+                storyContainer.removeChild(loadingIndicator);
+                
+                // Get scene from story content
+                const scene = storyContent[choiceId];
+                
+                // Handle missing scene with error recovery
+                if (!scene) {
+                    console.error('Scene not found:', choiceId);
+                    const errorSection = document.createElement('div');
+                    errorSection.className = 'error-message';
+                    errorSection.innerHTML = `<p>Error: Couldn't find the next part of the story (ID: ${choiceId})</p>`;
+                    
+                    const errorRecovery = document.createElement('div');
+                    errorRecovery.className = 'error-recovery';
+                    errorRecovery.innerHTML = `
+                        <p>Let's continue your journey another way:</p>
+                        <button class="choice-button" onclick="makeChoice('keep_exploring')">Return to the crossroads</button>
+                        <button class="choice-button" onclick="makeChoice('demo_ending')">Skip to the end</button>
+                        <button class="choice-button" onclick="location.reload()">Restart the story</button>
+                    `;
+                    
+                    storyContainer.appendChild(errorSection);
+                    storyContainer.appendChild(errorRecovery);
+                    
+                    // Scroll to the bottom
+                    window.scrollTo(0, document.body.scrollHeight);
+                    return;
+                }
+                
+                // Create player choice record for the selected button
+                const choiceButtons = document.querySelectorAll('.choice-button');
+                let selectedChoice = '';
+                
+                for (const button of choiceButtons) {
+                    if (button.onclick.toString().includes(choiceId)) {
+                        selectedChoice = button.textContent;
+                        break;
+                    }
+                }
+                
+                if (selectedChoice) {
+                    const playerChoiceElement = document.createElement('div');
+                    playerChoiceElement.className = 'player-choice';
+                    playerChoiceElement.textContent = selectedChoice;
+                    storyContainer.appendChild(playerChoiceElement);
+                }
+                
+                // Create new story section
+                const storySection = document.createElement('div');
+                storySection.className = 'story-section';
+                
+                // Add location indicator if available
+                if (scene.location) {
+                    const locationElement = document.createElement('div');
+                    locationElement.className = 'location-indicator';
+                    locationElement.textContent = scene.location;
+                    storySection.appendChild(locationElement);
+                    
+                    // Update current location for map
+                    updateLocationForMap(scene.location);
+                }
+                
+                // Add key location image if applicable
+                if (shouldShowLocationImage(choiceId)) {
+                    const locationKey = getLocationKeyForScene(choiceId);
+                    if (locationKey && locationData[locationKey]) {
+                        const location = locationData[locationKey];
+                        
+                        // Create image container
+                        const imageContainer = document.createElement('div');
+                        imageContainer.className = 'location-image-container';
+                        
+                        // Create image placeholder
+                        const imagePlaceholder = document.createElement('div');
+                        imagePlaceholder.className = 'location-image-placeholder';
+                        imagePlaceholder.textContent = `${location.name}`;
+                        imageContainer.appendChild(imagePlaceholder);
+                        
+                        // Add to story section
+                        storySection.appendChild(imageContainer);
+                    }
+                }
+                
+                // Add text paragraphs
+                scene.text.forEach(paragraph => {
+                    const p = document.createElement('p');
+                    p.innerHTML = paragraph; // Use innerHTML to support basic HTML like <strong>
+                    storySection.appendChild(p);
+                });
+                
+                // Check if this scene has an echo to collect
+                if (scene.isEcho && scene.echoId) {
+                    if (!echoesFound.includes(scene.echoId)) {
+                        // Add echo to collection
+                        echoesFound.push(scene.echoId);
+                        
+                        // Add echo image placeholder
+                        const imageContainer = document.createElement('div');
+                        imageContainer.className = 'fragment-image-container';
+                        
+                        // Create placeholder 
+                        const imagePlaceholder = document.createElement('div');
+                        imagePlaceholder.className = 'echo-placeholder';
+                        imagePlaceholder.textContent = 'Echo Fragment Image';
+                        imageContainer.appendChild(imagePlaceholder);
+                        
+                        // Add image container to the story section
+                        storySection.appendChild(imageContainer);
+                        
+                        // Add collection notification
+                        const echoNotice = document.createElement('p');
+                        echoNotice.innerHTML = `<strong>Echo fragment collected: ${scene.echoName} (${echoesFound.length}/5)</strong>`;
+                        storySection.appendChild(echoNotice);
+                        
+                        // Update the collection panel
+                        updateEchoCollection();
+                    }
+                }
+                
+                // Add choices
+                scene.choices.forEach(choice => {
+                    const button = document.createElement('button');
+                    button.className = 'choice-button';
+                    button.textContent = choice.text;
+                    
+                    if (choice.id === 'restart') {
+                        button.addEventListener('click', () => {
+                            location.reload();
+                        });
+                    } else {
+                        button.addEventListener('click', () => {
+                            makeChoice(choice.id);
+                        });
+                    }
+                    
+                    storySection.appendChild(button);
+                });
+                
+                // If we're at demo ending, show echo count
+                if (choiceId === 'demo_ending') {
+                    const echoSummary = document.createElement('p');
+                    echoSummary.style.marginTop = '20px';
+                    echoSummary.style.fontStyle = 'italic';
+                    echoSummary.textContent = `You found ${echoesFound.length} out of 5 possible echo fragments.`;
+                    storySection.appendChild(echoSummary);
+                }
+                
+                // Append new section
+                storyContainer.appendChild(storySection);
+                
+                // Update map
+                updateMap();
+                
+                // Scroll to the bottom
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 200); // Small delay for visual feedback
+        }
+        
+        function updateLocationForMap(locationText) {
+            // Map location text to location keys
+            const locationMapping = {
+                'RUINS ENTRANCE': 'city_ruins',
+                'CITY RUINS': 'city_ruins',
+                'CITY RUINS - CROSSROADS': 'city_ruins',
+                'CITY RUINS - SHRINE': 'shrine',
+                'CITY RUINS - ARCH': 'arch',
+                'WHISPER CAVERNS': 'whisper_caverns',
+                'WHISPER CAVERNS - ENTRANCE': 'whisper_caverns',
+                'WHISPER CAVERNS - DEEPER PASSAGE': 'whisper_caverns',
+                'WHISPER CAVERNS - UNDERWATER CHAMBER': 'underwater_chamber',
+                'MEMORY GATE': 'memory_gate',
+                'GHOST GARDEN': 'ghost_garden',
+                'GHOST GARDEN - CENTRAL AREA': 'ghost_garden',
+                'GHOST GARDEN - PERIPHERY': 'ghost_garden'
+            };
+            
+            const locationKey = locationMapping[locationText];
+            if (locationKey) {
+                currentLocation = locationKey;
+                
+                // Add to discovered locations if not already there
+                if (!discoveredLocations.includes(locationKey)) {
+                    discoveredLocations.push(locationKey);
+                }
+            }
+        }
+        
+        function getLocationKeyForScene(sceneId) {
+            // Map certain key scenes to locations that should show images
+            const keyLocationMapping = {
+                'memory_gate': 'memory_gate',
+                'press_emblem_gate': 'memory_gate', 
+                'underwater_chamber': 'underwater_chamber',
+                'reach_mask': 'underwater_chamber',
+                'ghost_garden_entry': 'ghost_garden',
+                'approach_figure': 'ghost_garden'
+            };
+            
+            return keyLocationMapping[sceneId] || null;
+        }
+        
+        function shouldShowLocationImage(sceneId) {
+            // Only show location images at certain key moments
+            return getLocationKeyForScene(sceneId) !== null;
+        }
+        
+        function updateMap() {
+            // Clear existing map markers
+            const existingMarkers = mapContainer.querySelectorAll('.map-location');
+            existingMarkers.forEach(marker => marker.remove());
+            
+            // Remove placeholder if we have discovered locations
+            if (discoveredLocations.length > 0) {
+                const placeholder = mapContainer.querySelector('.map-placeholder');
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+            }
+            
+            // Add markers for discovered locations
+            discoveredLocations.forEach(locationKey => {
+                const location = locationData[locationKey];
+                if (location && location.mapPosition) {
+                    const marker = document.createElement('div');
+                    marker.className = 'map-location';
+                    if (locationKey === currentLocation) {
+                        marker.classList.add('current');
+                    }
+                    
+                    marker.style.left = `${location.mapPosition.x}%`;
+                    marker.style.top = `${location.mapPosition.y}%`;
+                    
+                    // Add tooltip with location name
+                    marker.title = location.name;
+                    
+                    mapContainer.appendChild(marker);
+                }
+            });
+        }
+        
+        // Initialize map on load
+        updateMap();
+    </script>
+</body>
+</html> 

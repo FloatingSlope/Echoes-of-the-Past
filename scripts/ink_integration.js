@@ -13,6 +13,7 @@ const EchoesGame = {
     currentTags: [],     // Current passage tags
     timedChoiceActive: false, // Whether a timed choice is currently active
     defaultChoiceIndex: 0, // Default choice index for when time expires
+    echoJournal: [],     // Collected echoes
     
     /**
      * Initialize the game
@@ -57,6 +58,11 @@ const EchoesGame = {
                     this.makeChoice(choiceIndex);
                 }
             }
+            
+            // Space or Enter to continue if there's only one choice
+            if ((event.key === ' ' || event.key === 'Enter') && this.story.currentChoices.length === 1) {
+                this.makeChoice(0);
+            }
         });
     },
     
@@ -65,8 +71,8 @@ const EchoesGame = {
      */
     continueStory: function() {
         // Cancel any active timers when continuing to a new passage
-        if (window.EchoVisuals) {
-            window.EchoVisuals.cancelDecisionTimer();
+        if (window.cancelDecisionTimer) {
+            window.cancelDecisionTimer();
         }
         this.timedChoiceActive = false;
         
@@ -79,6 +85,12 @@ const EchoesGame = {
             // Get the next line of story content
             const text = this.story.Continue();
             this.currentTags = this.story.currentTags;
+            
+            // Process empty text (sometimes used for tags only)
+            if (text.trim() === '') {
+                this.processTags(this.currentTags);
+                continue;
+            }
             
             // Create a paragraph element
             const paragraphElement = document.createElement('p');
@@ -125,8 +137,8 @@ const EchoesGame = {
         if (!tags || tags.length === 0) return;
         
         // Update visuals based on tags
-        if (window.EchoVisuals) {
-            window.EchoVisuals.updateVisualState(tags);
+        if (window.updateVisualState) {
+            window.updateVisualState(tags);
         }
         
         // Check for ending tag (for special ending handling)
@@ -134,6 +146,16 @@ const EchoesGame = {
         if (endingTag) {
             const endingType = endingTag.split(':')[1].trim();
             this.handleEnding(endingType);
+        }
+        
+        // Check for echo-lore tags and add to journal if found
+        const echoLoreTag = tags.find(tag => tag.startsWith('echo-') && tag !== 'echo-lore');
+        if (tags.includes('echo-lore') && echoLoreTag) {
+            const echoId = echoLoreTag.split('-')[1].trim();
+            if (!isNaN(parseInt(echoId)) && !this.echoJournal.includes(echoId)) {
+                this.echoJournal.push(echoId);
+                console.log(`Added echo ${echoId} to journal. Total echoes: ${this.echoJournal.length}`);
+            }
         }
         
         // Check for timer tags
@@ -182,6 +204,15 @@ const EchoesGame = {
             endElement.className = 'story-end';
             endElement.textContent = 'The End';
             this.choicesElement.appendChild(endElement);
+            
+            // Add restart button
+            const restartButton = document.createElement('button');
+            restartButton.className = 'begin-button';
+            restartButton.textContent = 'Start Again';
+            restartButton.addEventListener('click', () => {
+                window.location.reload();
+            });
+            this.choicesElement.appendChild(restartButton);
         }
     },
     
@@ -201,6 +232,11 @@ const EchoesGame = {
         
         // Tell the story which choice was made
         this.story.ChooseChoiceIndex(choiceIndex);
+        
+        // Cancel any active timers
+        if (window.cancelDecisionTimer) {
+            window.cancelDecisionTimer();
+        }
         
         // Continue the story
         this.continueStory();
@@ -228,91 +264,112 @@ const EchoesGame = {
     handleEnding: function(endingType) {
         console.log('Reached ending:', endingType);
         
-        // Add ending-specific visual effects or music
-        if (window.EchoVisuals) {
-            switch(endingType) {
-                case 'restoration':
-                    window.EchoVisuals.changeBackground('ending_restoration');
-                    break;
-                case 'curator':
-                    window.EchoVisuals.changeBackground('ending_curator');
-                    break;
-                case 'transcendence':
-                    window.EchoVisuals.changeBackground('ending_transcendence');
-                    break;
-                case 'watcher':
-                    window.EchoVisuals.changeBackground('ending_watcher');
-                    break;
-                case 'release':
-                    window.EchoVisuals.changeBackground('ending_release');
-                    break;
-                case 'rebirth':
-                    window.EchoVisuals.changeBackground('ending_rebirth');
-                    break;
-                case 'fading':
-                    window.EchoVisuals.changeBackground('ending_fading');
-                    break;
-                default:
-                    window.EchoVisuals.changeBackground('ending_default');
-            }
+        // Create ending element
+        const endingElement = document.createElement('div');
+        endingElement.className = 'ending-banner';
+        
+        let endingTitle = '';
+        let endingDescription = '';
+        
+        // Set ending content based on type
+        switch(endingType) {
+            case 'restoration':
+                endingTitle = 'Restoration Ending';
+                endingDescription = 'You chose to restore the city as it was, though the restoration remains unstable.';
+                break;
+            case 'curator':
+                endingTitle = 'Curator Ending';
+                endingDescription = 'You preserved only select memories, becoming a keeper of a curated history.';
+                break;
+            case 'transcendence':
+                endingTitle = 'Transcendence Ending';
+                endingDescription = 'You rejected restoration and moved beyond being bound by memory.';
+                break;
+            case 'watcher':
+                endingTitle = 'Watcher Ending';
+                endingDescription = 'You took the place of the Silent Watcher, becoming a guardian of memory.';
+                break;
+            case 'release':
+                endingTitle = 'Release Ending';
+                endingDescription = 'You freed all collected echoes, allowing them to dissipate naturally.';
+                break;
+            case 'rebirth':
+                endingTitle = 'Rebirth Ending';
+                endingDescription = 'You transformed the echoes into something entirely new.';
+                break;
+            case 'fading':
+                endingTitle = 'Fading Ending';
+                endingDescription = 'With too few echoes collected, you lost your sense of self and became just another echo.';
+                break;
+            case 'demo':
+                endingTitle = 'Demo Complete';
+                endingDescription = 'You\'ve reached the end of the demo. The full game will continue the journey.';
+                break;
+            default:
+                endingTitle = 'The End';
+                endingDescription = 'Your journey has concluded.';
         }
         
-        // Add ending-specific class to body for CSS styling
-        document.body.classList.add('ending', `ending-${endingType}`);
+        endingElement.innerHTML = `
+            <h2>${endingTitle}</h2>
+            <p>${endingDescription}</p>
+            <p class="echo-count">Echoes collected: ${this.echoJournal.length}</p>
+        `;
         
-        // Play ending animation/music could be added here
+        // Add to the container after a delay
+        setTimeout(() => {
+            this.container.appendChild(endingElement);
+            this.container.scrollTop = this.container.scrollHeight;
+        }, 1000);
     }
 };
 
 /**
- * Start the Echoes of the Past game
- * This function should be called when the DOM is loaded
+ * Start the game with the Ink story
+ * @param {String} storyContainerId - ID of the element to render the story in
+ * @param {String} choicesContainerId - ID of the element to render choices in
  */
-function startEchoesGame() {
-    // Add visible error message if dependencies aren't loaded
-    const storyContainer = document.getElementById('story-container');
-    
+function startEchoesGame(storyContainerId, choicesContainerId) {
     // Check if inkjs is available
-    if (!window.inkjs) {
-        console.error('inkjs library not found. Make sure it is properly loaded.');
-        storyContainer.innerHTML = '<p class="error">Error: inkjs library not found. Check console for details.</p>';
+    if (typeof inkjs === 'undefined') {
+        console.error('inkjs library not found! Please check your script imports.');
+        // Try to show an error message in the story container
+        const storyContainer = document.getElementById(storyContainerId);
+        if (storyContainer) {
+            storyContainer.innerHTML = '<p class="error">Error loading the story engine. Check the console for details.</p>';
+        }
         return;
     }
     
     // Check if story content is available
     if (!window.storyContent) {
-        console.error('Story content not found. Make sure story_content.js is properly loaded.');
-        storyContainer.innerHTML = '<p class="error">Error: Story content not found. Check console for details.</p>';
+        console.error('Story content not found! Make sure story_content.js is loaded correctly.');
+        // Try to show an error message in the story container
+        const storyContainer = document.getElementById(storyContainerId);
+        if (storyContainer) {
+            storyContainer.innerHTML = '<p class="error">Error loading the story content. Check the console for details.</p>';
+        }
         return;
     }
     
     try {
-        // Create story instance
-        const story = new inkjs.Story(window.storyContent);
+        // Create a new ink story
+        const inkStory = new inkjs.Story(window.storyContent);
         
         // Initialize the game
-        EchoesGame.init(story, 'story-container', 'choices-container');
-        
-        // Add CSS styles for story presentation
-        addStoryStyles();
-        
-        console.log('Game initialized successfully');
-    } catch (e) {
-        console.error('Error starting game:', e);
-        console.error('Error type:', typeof e);
-        if (e && e.stack) {
-            console.error('Stack trace:', e.stack);
+        EchoesGame.init(inkStory, storyContainerId, choicesContainerId);
+    } catch (error) {
+        console.error('Error starting the game:', error);
+        // Try to show an error message in the story container
+        const storyContainer = document.getElementById(storyContainerId);
+        if (storyContainer) {
+            storyContainer.innerHTML = '<p class="error">Error starting the game. Check the console for details.</p>';
         }
-        if (e && typeof e === 'object') {
-            for (const key in e) {
-                if (Object.prototype.hasOwnProperty.call(e, key)) {
-                    console.error(`Error property [${key}]:`, e[key]);
-                }
-            }
-        }
-        storyContainer.innerHTML = `<p class="error">Error starting game: ${e && e.message ? e.message : e}</p>`;
     }
 }
+
+// Make the start function available globally
+window.startEchoesGame = startEchoesGame;
 
 /**
  * Add basic CSS styles for story presentation
@@ -439,26 +496,11 @@ function addStoryStyles() {
     document.head.appendChild(styleElement);
 }
 
-// Expose the game starter globally
-window.startEchoesGame = startEchoesGame;
-
 // Start the game when the document is loaded and Begin button is clicked
 document.addEventListener('DOMContentLoaded', () => {
-    const beginButton = document.getElementById('begin-button');
-    const startGameDiv = document.getElementById('start-game');
+    // Add the story styles
+    addStoryStyles();
     
-    if (beginButton) {
-        beginButton.addEventListener('click', () => {
-            // Hide the begin button after clicking it
-            if (startGameDiv) {
-                startGameDiv.style.display = 'none';
-            }
-            
-            // Start the game
-            startEchoesGame();
-        });
-    } else {
-        // If the button doesn't exist for some reason, start the game directly
-        startEchoesGame();
-    }
+    // We don't need to add another event listener here since it's handled in index.html
+    // The event handlers in index.html will call startEchoesGame with the proper parameters
 });

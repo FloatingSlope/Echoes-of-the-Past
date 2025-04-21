@@ -25,6 +25,7 @@ let storyState = {
     echoJournalElement: null,
     characterElement: null,
     timerElement: null,
+    clockElement: null,
     initialized: false
 };
 
@@ -44,7 +45,7 @@ function initializeInterface() {
     // Create character element
     storyState.characterElement = document.createElement('div');
     storyState.characterElement.id = 'character-layer';
-    storyState.characterElement.className = 'character-layer';
+    storyState.characterElement.className = 'character-layer hidden';
     document.body.appendChild(storyState.characterElement);
     
     // Create echo journal visual element
@@ -59,14 +60,16 @@ function initializeInterface() {
     storyState.timerElement.className = 'decision-timer hidden';
     document.body.appendChild(storyState.timerElement);
     
+    // Add timer bar inside timer element
+    const timerBar = document.createElement('div');
+    timerBar.className = 'timer-bar';
+    storyState.timerElement.appendChild(timerBar);
+    
     // Create clock element for visual timer
     storyState.clockElement = document.createElement('div');
     storyState.clockElement.id = 'clock-timer';
     storyState.clockElement.className = 'clock-timer hidden';
     document.body.appendChild(storyState.clockElement);
-    
-    // Add styles
-    addStyles();
     
     storyState.initialized = true;
 }
@@ -95,12 +98,18 @@ function updateVisualState(tags) {
     } else if (tags.includes('ghost_garden')) {
         changeBackground('ghost_garden');
         storyState.currentLocation = 'ghost_garden';
-    } else if (tags.includes('pavilion')) {
-        changeBackground('pavilion');
-        storyState.currentLocation = 'pavilion';
     } else if (tags.includes('memory_core')) {
         changeBackground('memory_core');
         storyState.currentLocation = 'memory_core';
+    } 
+    
+    // Process ending tags
+    for (const tag of tags) {
+        if (tag.startsWith('ending:')) {
+            const endingType = tag.split(':')[1];
+            changeBackground(`ending_${endingType}`);
+            storyState.currentLocation = `ending_${endingType}`;
+        }
     }
     
     // Process character appearance tags
@@ -114,11 +123,14 @@ function updateVisualState(tags) {
     
     // Process echo discovery tags
     if (tags.includes('echo-lore')) {
-        // Extract echo ID from tags if format is echo-XX where XX is the ID
-        const echoTag = tags.find(tag => tag.match(/echo-\d+/));
-        if (echoTag) {
-            const echoId = echoTag.split('-')[1];
-            unlockEchoVisual(echoId);
+        // Extract echo ID from tags
+        for (const tag of tags) {
+            if (tag.startsWith('echo-')) {
+                const echoId = tag.split('-')[1];
+                if (!isNaN(parseInt(echoId))) {
+                    unlockEchoVisual(echoId);
+                }
+            }
         }
     }
     
@@ -146,26 +158,51 @@ function updateVisualState(tags) {
 function changeBackground(location) {
     if (!storyState.backgroundElement) return;
     
-    // First, remove any active classes
-    storyState.backgroundElement.className = 'environment-layer';
+    // Create a temporary background for the transition
+    const tempBg = document.createElement('div');
+    tempBg.className = 'environment-layer';
+    tempBg.style.opacity = '0';
+    document.body.insertBefore(tempBg, storyState.backgroundElement);
     
-    // Set new background image - use the Echoes_of_the_Past_alternative_cover.png as a stand-in for backgrounds
-    if (location === 'cover') {
-        storyState.backgroundElement.style.backgroundImage = `url(${config.imagePath}Echoes_of_the_Past_alternative_cover.png)`;
-    } else {
-        // Use the cover image as a stand-in for all backgrounds
-        storyState.backgroundElement.style.backgroundImage = `url(${config.imagePath}Echoes_of_the_Past_alternative_cover.png)`;
+    // Set background image based on location
+    let imagePath = '';
+    
+    switch(location) {
+        case 'cover':
+            imagePath = 'Cover Art/EOTP_Cover.webp';
+            break;
+        case 'city_ruins':
+            imagePath = 'EOTP_Prototype_Image_1.webp';
+            break;
+        case 'whisper_caverns':
+            imagePath = 'EOTP_Prototype_Image_2.webp';
+            break;
+        case 'memory_gate':
+            imagePath = 'EOTP_Prototype_Image_1.webp'; // Placeholder
+            break;
+        case 'ghost_garden':
+            imagePath = 'EOTP_Prototype_Image_2.webp'; // Placeholder
+            break;
+        case 'memory_core':
+            imagePath = 'EOTP_Prototype_Image_1.webp'; // Placeholder
+            break;
+        default:
+            // For endings and other locations, use a generic background
+            imagePath = 'Cover Art/EOTP_Cover.webp';
     }
     
-    // Add fade-in effect
-    setTimeout(() => {
-        storyState.backgroundElement.classList.add('environment-fade-in');
-    }, 50);
+    // Set the image on the temp background
+    tempBg.style.backgroundImage = `url(${config.imagePath}${imagePath})`;
     
-    // Remove fade class after transition completes
+    // Fade out old background, fade in new one
+    storyState.backgroundElement.style.opacity = '0';
+    
+    // After old background fades out, remove it and make the new one fully visible
     setTimeout(() => {
-        storyState.backgroundElement.classList.remove('environment-fade-in');
-    }, config.fadeSpeed + 50);
+        document.body.removeChild(storyState.backgroundElement);
+        storyState.backgroundElement = tempBg;
+        tempBg.style.opacity = '1';
+    }, config.fadeSpeed);
 }
 
 /**
@@ -175,14 +212,28 @@ function changeBackground(location) {
 function showCharacter(character) {
     if (!storyState.characterElement) return;
     
-    // Use Character.png as the stand-in image for all characters as requested
-    storyState.characterElement.style.backgroundImage = `url(${config.imagePath}Character.png)`;
-    storyState.characterElement.classList.remove('hidden');
-    storyState.characterElement.classList.add('character-fade-in');
+    // Set character image based on character type
+    let imagePath = '';
     
+    switch(character) {
+        case 'wanderer':
+            imagePath = 'Veiled Wanderer.png';
+            break;
+        case 'watcher':
+            imagePath = 'Character.png';
+            break;
+        default:
+            imagePath = 'Character.png';
+    }
+    
+    storyState.characterElement.style.backgroundImage = `url(${config.imagePath}${imagePath})`;
+    storyState.characterElement.classList.remove('hidden');
+    
+    // Apply fade-in animation
+    storyState.characterElement.style.opacity = '0';
     setTimeout(() => {
-        storyState.characterElement.classList.remove('character-fade-in');
-    }, config.fadeSpeed);
+        storyState.characterElement.style.opacity = '1';
+    }, 50);
 }
 
 /**
@@ -191,11 +242,12 @@ function showCharacter(character) {
 function hideCharacters() {
     if (!storyState.characterElement) return;
     
-    storyState.characterElement.classList.add('character-fade-out');
+    // Apply fade-out animation
+    storyState.characterElement.style.opacity = '0';
     
+    // After animation, add hidden class
     setTimeout(() => {
         storyState.characterElement.classList.add('hidden');
-        storyState.characterElement.classList.remove('character-fade-out');
     }, config.fadeSpeed);
 }
 
@@ -214,12 +266,18 @@ function unlockEchoVisual(echoId) {
     const echoIcon = document.createElement('div');
     echoIcon.className = 'echo-icon';
     echoIcon.setAttribute('data-echo-id', echoId);
-    // Use a simple colored div as echo icon instead of requiring an image
+    
+    // Use a colored div as echo icon with HSL color based on echo ID for uniqueness
     echoIcon.style.backgroundColor = `hsl(${(parseInt(echoId) * 35) % 360}, 70%, 50%)`;
-    echoIcon.style.backgroundImage = 'none';
     
     // Add hover effect with echo title
-    echoIcon.setAttribute('title', `Echo #${echoId}`);
+    echoIcon.setAttribute('title', `Echo Fragment #${echoId}`);
+    
+    // Add click handler to show echo details
+    echoIcon.addEventListener('click', () => {
+        // In a full implementation, this would show the echo content
+        alert(`Echo Fragment #${echoId} - View the lore entry in your journal.`);
+    });
     
     // Add to journal with animation
     storyState.echoJournalElement.appendChild(echoIcon);
@@ -239,316 +297,107 @@ function startDecisionTimer(timerType) {
     if (!storyState.timerElement || !storyState.clockElement) return;
     
     // Clear any existing timers
-    Object.keys(storyState.activeTimers).forEach(timerId => {
-        clearTimeout(storyState.activeTimers[timerId]);
-        clearInterval(storyState.activeTimers[timerId]);
-        delete storyState.activeTimers[timerId];
-    });
+    cancelDecisionTimer();
     
     // Get duration based on timer type
     const duration = config.timerDurations[timerType] || config.timerDurations.standard;
     const seconds = Math.floor(duration / 1000);
     
-    // Create timer bar elements
-    storyState.timerElement.innerHTML = '';
+    // Show timer elements
     storyState.timerElement.classList.remove('hidden');
-    
-    const timerBar = document.createElement('div');
-    timerBar.className = 'timer-bar';
-    storyState.timerElement.appendChild(timerBar);
-    
-    const timerProgress = document.createElement('div');
-    timerProgress.className = 'timer-progress';
-    timerBar.appendChild(timerProgress);
-    
-    // Add urgency class based on timer type
-    storyState.timerElement.classList.add(`timer-${timerType}`);
-    
-    // Setup clock visual element
-    storyState.clockElement.innerHTML = '';
     storyState.clockElement.classList.remove('hidden');
     
-    // Create clock display
-    const clockDisplay = document.createElement('div');
-    clockDisplay.className = 'clock-display';
-    clockDisplay.textContent = `${seconds}s`;
-    storyState.clockElement.appendChild(clockDisplay);
+    // Set initial clock value
+    storyState.clockElement.textContent = `${seconds}`;
     
-    storyState.clockElement.classList.add(`timer-${timerType}`);
+    // Get timer bar element
+    const timerBar = storyState.timerElement.querySelector('.timer-bar');
+    if (!timerBar) return;
     
-    // Animate the timer
-    timerProgress.style.transition = `width ${duration}ms linear`;
-    timerProgress.style.width = '100%';
+    // Set initial width and transition
+    timerBar.style.width = '100%';
+    timerBar.style.transition = `width ${duration}ms linear`;
     
-    // Force reflow before starting animation
-    timerProgress.offsetHeight;
+    // Begin animation after a short delay
+    setTimeout(() => {
+        timerBar.style.width = '0%';
+    }, 50);
     
-    // Start the countdown
-    timerProgress.style.width = '0%';
-    
-    // Update clock countdown every second
+    // Set up countdown interval
     let remainingSeconds = seconds;
-    
     storyState.activeTimers.clockInterval = setInterval(() => {
         remainingSeconds--;
-        if (remainingSeconds >= 0) {
-            clockDisplay.textContent = `${remainingSeconds}s`;
-            
-            // Add urgency animation as time gets lower
-            if (remainingSeconds <= 5) {
-                clockDisplay.classList.add('critical-time');
-            }
+        if (remainingSeconds <= 0) {
+            clearInterval(storyState.activeTimers.clockInterval);
+        } else {
+            storyState.clockElement.textContent = `${remainingSeconds}`;
+        }
+        
+        // Change color when time is running out
+        if (remainingSeconds <= 3) {
+            storyState.clockElement.style.color = '#ff5555';
         }
     }, 1000);
     
-    // Set a timeout to handle expiration
-    storyState.activeTimers.expiration = setTimeout(() => {
+    // Set timeout for timer expiration
+    storyState.activeTimers.expirationTimeout = setTimeout(() => {
+        // Hide timer elements
         storyState.timerElement.classList.add('hidden');
-        storyState.timerElement.classList.remove(`timer-${timerType}`);
         storyState.clockElement.classList.add('hidden');
-        storyState.clockElement.classList.remove(`timer-${timerType}`);
         
-        // Clear the interval
-        clearInterval(storyState.activeTimers.clockInterval);
-        
-        // Notify the story that time expired (this function would be defined in the Ink/JS integration)
+        // Call time expired handler if it exists in the window object
         if (typeof window.timeExpired === 'function') {
             window.timeExpired();
         }
+        
+        // Clear active timers
+        cancelDecisionTimer();
     }, duration);
 }
 
 /**
- * Cancel the active decision timer
+ * Cancel any active decision timers
  */
 function cancelDecisionTimer() {
-    if (!storyState.timerElement) return;
-    
     // Clear any existing timers
-    Object.keys(storyState.activeTimers).forEach(timerId => {
-        clearTimeout(storyState.activeTimers[timerId]);
-        clearInterval(storyState.activeTimers[timerId]);
-        delete storyState.activeTimers[timerId];
-    });
-    
-    // Hide timer element
-    storyState.timerElement.classList.add('hidden');
-    
-    // Hide clock element
-    if (storyState.clockElement) {
-        storyState.clockElement.classList.add('hidden');
-        storyState.clockElement.classList.remove('timer-standard', 'timer-urgent', 'timer-critical');
+    if (storyState.activeTimers.clockInterval) {
+        clearInterval(storyState.activeTimers.clockInterval);
     }
     
-    // Remove specific timer classes
-    storyState.timerElement.classList.remove('timer-standard', 'timer-urgent', 'timer-critical');
+    if (storyState.activeTimers.expirationTimeout) {
+        clearTimeout(storyState.activeTimers.expirationTimeout);
+    }
+    
+    // Reset active timers
+    storyState.activeTimers = {};
+    
+    // Hide timer elements
+    if (storyState.timerElement) {
+        storyState.timerElement.classList.add('hidden');
+    }
+    
+    if (storyState.clockElement) {
+        storyState.clockElement.classList.add('hidden');
+        storyState.clockElement.style.color = 'white'; // Reset color
+    }
 }
 
 /**
- * Play an ambient visual effect
+ * Play ambient visual effects based on the current scene
  * @param {string} effectType - The type of effect to play
  */
 function playAmbientEffect(effectType) {
-    if (!storyState.backgroundElement) return;
-    
-    storyState.backgroundElement.classList.remove('effect-echo_pulse', 'effect-memory_flow');
-    storyState.backgroundElement.classList.add(`effect-${effectType}`);
+    // In a full implementation, this would add ambient visual effects
+    // like particle systems, lighting changes, etc.
+    console.log(`Playing ambient effect: ${effectType}`);
 }
 
-/**
- * Add CSS styles for all visual elements
- */
-function addStyles() {
-    const styleElement = document.createElement('style');
-    styleElement.textContent = `
-        /* Environment Layer */
-        .environment-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            z-index: -10;
-            opacity: 0.8;
-            transition: opacity ${config.fadeSpeed}ms ease;
-        }
-        
-        .environment-fade-in {
-            opacity: 1;
-        }
-        
-        /* Character Layer */
-        .character-layer {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 400px;
-            background-size: contain;
-            background-position: bottom center;
-            background-repeat: no-repeat;
-            z-index: -5;
-            opacity: 1;
-            transition: opacity ${config.fadeSpeed}ms ease;
-        }
-        
-        .character-fade-in {
-            opacity: 1;
-        }
-        
-        .character-fade-out {
-            opacity: 0;
-        }
-        
-        /* Echo Journal */
-        .echo-journal {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            max-width: 200px;
-            z-index: 10;
-        }
-        
-        .echo-icon {
-            width: 40px;
-            height: 40px;
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .echo-icon:hover {
-            transform: scale(1.2);
-            border-color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .echo-discovered {
-            animation: pulse 2s ease-in-out;
-        }
-        
-        /* Timer Styles */
-        .decision-timer {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            max-width: 500px;
-            z-index: 100;
-        }
-        
-        .timer-bar {
-            height: 10px;
-            background-color: rgba(50, 50, 50, 0.5);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        
-        .timer-progress {
-            height: 100%;
-            width: 100%;
-            background-color: rgba(200, 200, 200, 0.8);
-        }
-        
-        /* Clock Timer Styles */
-        .clock-timer {
-            position: fixed;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            margin-top: 15px;
-            text-align: center;
-        }
-        
-        .clock-display {
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 5px 15px;
-            border-radius: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
-        
-        .critical-time {
-            color: #ff5252;
-            animation: pulse-time 0.7s infinite alternate;
-        }
-        
-        @keyframes pulse-time {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
-        }
-        
-        .timer-standard .timer-progress {
-            background-color: #4caf50; /* Green */
-        }
-        
-        .timer-urgent .timer-progress {
-            background-color: #ff9800; /* Orange */
-        }
-        
-        .timer-critical .timer-progress {
-            background-color: #f44336; /* Red */
-        }
-        
-        /* Ambient Effects */
-        .effect-echo_pulse {
-            animation: echo-pulse 5s infinite alternate;
-        }
-        
-        .effect-memory_flow {
-            animation: memory-flow 20s infinite linear;
-        }
-        
-        /* Utility Classes */
-        .hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        /* Animations */
-        @keyframes pulse {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.5); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        @keyframes echo-pulse {
-            0% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-            100% { filter: brightness(1); }
-        }
-        
-        @keyframes memory-flow {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
-        }
-    `;
-    
-    document.head.appendChild(styleElement);
-}
-
-// Export functions for Ink integration
-window.EchoVisuals = {
-    updateVisualState,
-    changeBackground,
-    showCharacter,
-    hideCharacters,
-    unlockEchoVisual,
-    startDecisionTimer,
-    cancelDecisionTimer,
-    playAmbientEffect
-};
+// Export functions for use in other modules
+window.updateVisualState = updateVisualState;
+window.changeBackground = changeBackground;
+window.showCharacter = showCharacter;
+window.hideCharacters = hideCharacters;
+window.unlockEchoVisual = unlockEchoVisual;
+window.startDecisionTimer = startDecisionTimer;
+window.cancelDecisionTimer = cancelDecisionTimer;
+window.playAmbientEffect = playAmbientEffect;

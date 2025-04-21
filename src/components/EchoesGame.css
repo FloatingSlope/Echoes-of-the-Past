@@ -1,0 +1,106 @@
+/* Echoes Game Component Styles */
+
+.echoes-game {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Story Container */
+.story-container {
+  width: 100%;
+  min-height: 200px;
+  max-height: 70vh;
+  margin-bottom: 20px;
+  overflow-y: auto;
+  padding-right: 10px;
+  line-height: 1.6;
+}
+
+/* Story Elements */
+.story-fragment {
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.player-choice {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: rgba(50, 50, 100, 0.3);
+  border-left: 3px solid #4caf50;
+  border-radius: 5px;
+  font-style: italic;
+}
+
+/* Choices Container */
+.choices-container {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.choices-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.choice {
+  margin: 10px 0;
+  padding: 12px 15px;
+  background-color: rgba(40, 40, 60, 0.8);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.choice:hover {
+  background-color: rgba(60, 60, 90, 0.9);
+  transform: translateX(5px);
+}
+
+.choice-number {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  background-color: rgba(70, 70, 120, 0.8);
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.story-end {
+  text-align: center;
+  font-size: 24px;
+  margin: 30px 0;
+  text-shadow: 0 0 10px rgba(155, 155, 255, 0.7);
+}
+
+/* Ending Banner */
+.ending-banner {
+  padding: 20px;
+  margin: 20px 0;
+  background-color: rgba(50, 50, 70, 0.8);
+  border-radius: 10px;
+  text-align: center;
+  animation: fadeIn 1s ease;
+}
+
+.ending-banner h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+  color: #4caf50;
+  font-family: 'PixelatedElegance', "Times New Roman", serif;
+}
+
+.echo-count {
+  font-style: italic;
+  margin-top: 15px;
+  color: #aaffaa;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+} 

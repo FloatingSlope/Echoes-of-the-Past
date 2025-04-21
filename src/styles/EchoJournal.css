@@ -1,0 +1,72 @@
+#echo-journal {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  border: 1px solid #4caf50;
+  width: 150px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+#echo-journal:hover {
+  background-color: rgba(10, 20, 30, 0.85);
+}
+
+#echo-journal h3 {
+  margin: 0 0 5px 0;
+  text-align: center;
+  font-size: 16px;
+  color: #4caf50;
+}
+
+.echo-count {
+  color: #aaffaa;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.echo-list {
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.echo-item {
+  margin: 5px 0;
+  padding: 4px;
+  background-color: rgba(50, 70, 90, 0.5);
+  border-radius: 3px;
+  text-align: center;
+  font-size: 12px;
+  animation: glow 2s infinite alternate;
+}
+
+/* Glow animation for echoes */
+@keyframes glow {
+  from {
+    box-shadow: 0 0 1px rgba(76, 175, 80, 0.5);
+  }
+  to {
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.8);
+  }
+}
+
+@media (max-width: 768px) {
+  #echo-journal {
+    top: 10px;
+    right: 10px;
+    width: 100px;
+    font-size: 12px;
+  }
+  
+  #echo-journal h3 {
+    font-size: 14px;
+  }
+} 
