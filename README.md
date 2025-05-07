@@ -47,7 +47,8 @@ npm run dev
 
 ## Credits
 
-All story content and images are original creations for this project.
+All story content and images are original creations for this project. I got help from SORA for some of the image generation. 
+Additionally "CodingFreeze" is my second GitHub account I use for personal projects and I accidentally pushed code using it, so it shows up as a contributor. 
 
 ## License
 
