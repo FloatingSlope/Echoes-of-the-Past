@@ -80,3 +80,164 @@ I'm particularly pleased with how the mask puzzle turned out—finding it in the
 
 > "The echoes don't just trigger memories of the past.  
 > They shape how we move through what remains."
+
+---
+
+## Devlog Entry 04 — "Echoing in React"
+Date: April 25, 2025
+
+The past two weeks have been transformative for Echoes of the Past. We've successfully implemented a React frontend that has elevated the game's presentation while maintaining its contemplative atmosphere.
+
+### React Implementation Journey
+
+Converting our HTML/CSS/JavaScript prototype to React was both challenging and rewarding. We decided to move to React to improve the game's performance, maintainability, and to enable more dynamic interactions with the narrative content.
+
+The transition began with restructuring our codebase into React components:
+- **StoryContainer**: The core component that manages the story progression and renders narrative text
+- **EchoCollection**: A modal component that displays all discovered echo fragments
+- **MapPanel**: An interactive map showing discovered locations
+- **ChoiceButton**: Enhanced choice buttons with animations and keyboard navigation
+
+One of our biggest challenges was integrating the Ink narrative engine with React's component lifecycle. We solved this by creating a custom hook (`useInkStory`) that manages the story state and provides methods for interacting with it. This abstraction keeps our components clean and focused on rendering, not story logic.
+
+### Visual and UX Improvements
+
+The React implementation allowed us to significantly enhance the game's visual presentation:
+- Smooth transitions between story passages using React's animation capabilities
+- Dynamic theming based on the current location (subtle color shifts in the UI)
+- Responsive design that works beautifully on both desktop and mobile
+- Accessibility improvements including keyboard navigation and better screen reader support
+
+The Echo Collection interface was completely redesigned with a card-based system that makes browsing discovered fragments more intuitive. Each echo now includes subtle particle effects that respond to mouse movement, giving them an appropriately ethereal quality.
+
+### Technical Wins
+
+Some technical achievements we're particularly proud of:
+- Implementing a save/load system using browser localStorage that persists the player's progress
+- Creating an event system that allows dynamic updates to the UI based on story events
+- Optimizing performance by only re-rendering components that change between passages
+- Building a custom text animation system for gradual text reveals that enhances the atmospheric quality
+
+### Lessons Learned
+
+The React transition taught us valuable lessons:
+1. State management is critical - keeping track of discovered echoes, visited locations, and story variables required careful planning
+2. Breaking UI elements into smaller, focused components made development more manageable
+3. Custom hooks dramatically simplified the integration of the Ink engine with React
+4. Testing across different devices early and often prevented compatibility issues
+
+### Next Steps
+
+As we approach the final stages of development, our focus shifts to:
+- Completing the remaining story branches and implementing all seven endings
+- Adding ambient sound design to complement the visual experience
+- Final performance optimizations for lower-end devices
+- Comprehensive playtesting to refine the narrative pacing
+
+The React frontend has transformed Echoes of the Past from a simple text adventure into an immersive interactive experience while maintaining the emotional core that makes the story compelling.
+
+> "The city remembers in fragments.  
+> Our code now echoes in components."
+
+---
+
+## Devlog Entry 05 — "Echoes Culminating"
+Date: May 06, 2025
+
+As we approach the final stages of development for Echoes of the Past, it's time to outline our vision for completing the project and bringing this journey to a satisfying conclusion.
+
+### Completing the Narrative Architecture
+
+Our priority is finalizing the narrative branches that lead to all seven planned endings:
+
+1. **Restoration Ending**: We need to implement the full sequence where players can choose to restore the city, including the visual effects of unstable reconstruction.
+  
+2. **Curator Ending**: This requires enhancing the Echo Selection UI to allow players to choose which specific memories they want to preserve.
+  
+3. **Transcendence Ending**: The most abstract ending needs careful implementation of the "letting go" sequence with appropriate visual metaphors.
+  
+4. **Watcher Ending**: We plan to enhance the Silent Watcher encounter in the Ghost Garden and create a smooth transition to the player assuming this role.
+  
+5. **Release Ending**: The animation system for echo dissipation needs refinement to make this ending emotionally resonant.
+  
+6. **Rebirth Ending**: This will require new visual assets to portray the transformation of echoes into something entirely new.
+  
+7. **Fading Ending**: The "failure state" ending needs subtle implementation so it feels like a legitimate ending rather than a punishment.
+
+Each ending requires approximately 200-300 words of narrative text, plus conditional variations based on which echoes the player has collected.
+
+### Technical Enhancements
+
+To finish the game properly, we need to implement several key technical features:
+
+1. **Audio System**: 
+   - Ambient soundscapes for each location
+   - Unique sound effects for echo discovery
+   - Subtle musical themes for emotional moments
+   - Volume controls and accessibility options
+
+2. **Enhanced Save System**:
+   - Multiple save slots
+   - Save thumbnails with location information
+   - Autosave at key narrative junctures
+   - Cloud save integration (stretch goal)
+
+3. **Performance Optimizations**:
+   - Lazy loading of location assets
+   - Improved text rendering for slower devices
+   - Memory management for long play sessions
+   - Better offline support
+
+4. **Accessibility Expansion**:
+   - High contrast mode
+   - Customizable text size and font
+   - Screen reader improvements
+   - Alternative navigation options
+
+### Visual Polishing
+
+The final visual elements needed include:
+
+1. **Echo Visualization**: We need to finalize all 12 echo fragment illustrations with consistent style and theming.
+
+2. **Location Artwork**: Each of the 6 main areas requires detailed environment art that captures their unique atmosphere.
+
+3. **UI Refinement**: The interface needs final polish, with attention to micro-animations and transition effects.
+
+4. **The Veiled Wanderer**: We'll add subtle character presence in key moments, with minimal but evocative representation.
+
+### Testing and Refinement
+
+Before release, we plan a three-phase testing approach:
+
+1. **Narrative Cohesion Testing**: Ensuring all branches and endings feel satisfying and appropriately reflect player choices.
+
+2. **Technical Testing**: Checking for bugs, performance issues, and cross-device compatibility.
+
+3. **Emotional Impact Testing**: Gathering feedback on whether the game effectively conveys its themes of memory, loss, and choice.
+
+### Release Strategy
+
+Our plan for finishing and releasing the game includes:
+
+1. Complete all essential narrative content by June 15
+2. Finalize technical implementation by June 30
+3. Polish phase through July 15
+4. Beta testing July 15-31
+5. Final adjustments by August 10
+6. Release on itch.io by August 15
+
+This schedule gives us enough time to ensure quality without rushing the final important details.
+
+### Beyond Release
+
+Post-launch, we're considering:
+
+1. A "Director's Commentary" mode that discusses the themes and development decisions
+2. A physical zine with select echo fragments and artwork
+3. Potential expansion with new areas and echoes if reception warrants
+
+Echoes of the Past has evolved significantly from its initial concept, but its core essence remains intact: a contemplative journey through memory and choice. As we move toward completion, we're focused on honoring that essence while delivering a polished, emotionally resonant experience.
+
+> "The end of a journey is just another echo.  
+> What matters is who's listening when it fades."
