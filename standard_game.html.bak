@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of the Past - Standard Game</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #111;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 36px;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-style: italic;
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+        
+        .story-section {
+            background-color: rgba(30, 30, 30, 0.8);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        #story-container {
+            margin-bottom: 20px;
+        }
+        
+        #choices-container {
+            margin-top: 20px;
+        }
+        
+        .player-choice {
+            background-color: rgba(80, 80, 100, 0.6);
+            border-left: 4px solid #4caf50;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        .choices-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .choice {
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 12px 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: left;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: block;
+            width: 100%;
+        }
+        
+        .choice:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+            transform: translateY(-2px);
+        }
+        
+        .choice-number {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            background-color: rgba(76, 175, 80, 0.3);
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .story-end {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 24px;
+            font-style: italic;
+        }
+        
+        .begin-button {
+            display: block;
+            margin: 20px auto;
+            background-color: rgba(60, 60, 90, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .begin-button:hover {
+            background-color: rgba(80, 80, 120, 0.9);
+        }
+        
+        .location-indicator {
+            font-size: 0.9em;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .story-fragment {
+            margin-bottom: 20px;
+        }
+        
+        strong {
+            color: #4caf50;
+        }
+        
+        .timer-container {
+            margin: 15px 0;
+            position: relative;
+            height: 8px;
+            background-color: rgba(50, 50, 50, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background-color: #4caf50;
+            border-radius: 4px;
+            transition: width linear;
+        }
+        
+        .timer-bar.urgent {
+            background-color: #ff9800;
+        }
+        
+        .timer-bar.critical {
+            background-color: #f44336;
+        }
+        
+        /* Echo Collection Panel */
+        .echo-collection {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            width: 250px;
+            background-color: rgba(20, 20, 30, 0.95);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            z-index: 99;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.3s ease;
+        }
+        
+        .echo-collection.shown {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .echo-collection h3 {
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .echo-item {
+            margin-bottom: 20px;
+            background-color: rgba(40, 40, 60, 0.6);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .echo-item h4 {
+            margin-top: 0;
+            color: #4caf50;
+        }
+        
+        .echo-item p {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .echo-image {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .echo-placeholder {
+            width: 100%;
+            height: 120px;
+            background-color: rgba(50, 50, 70, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px dashed rgba(76, 175, 80, 0.5);
+        }
+        
+        .empty-collection {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+            padding: 30px 0;
+        }
+        
+        /* Control buttons */
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 15px;
+        }
+        
+        .control-button {
+            background-color: rgba(50, 50, 70, 0.8);
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .control-button:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+        }
+        
+        .control-button.active {
+            background-color: #4caf50;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .echo-collection {
+                width: 90%;
+                left: 5%;
+                right: 5%;
+                transform: translateY(120%);
+            }
+            
+            .echo-collection.shown {
+                transform: translateY(0);
+            }
+        }
+        
+        /* Loading indicator */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #aaa;
+        }
+        
+        /* Error message */
+        .error-message {
+            background-color: rgba(244, 67, 54, 0.2);
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Echoes of the Past</h1>
+            <p class="subtitle">Memories waiting to be discovered...</p>
+        </header>
+        
+        <div class="story-section">
+        <div id="story-container">
+                <div class="loading">Loading story...</div>
+        </div>
+        
+            <div id="timer-container" class="timer-container" style="display: none;">
+                <div id="timer-bar" class="timer-bar"></div>
+            </div>
+            
+            <div id="choices-container"></div>
+        </div>
+        
+        <div class="game-controls">
+            <button id="echo-toggle" class="control-button">Echo Journal</button>
+            <button id="restart-button" class="control-button">Restart Game</button>
+            <button id="menu-button" class="control-button">Main Menu</button>
+        </div>
+    </div>
+    
+    <div id="echo-collection" class="echo-collection">
+        <h3>Echo Journal</h3>
+        <div id="echo-entries"></div>
+    </div>
+
+    <!-- Include the Ink engine -->
+    <script src="https://unpkg.com/inkjs@2.2.2/dist/ink.js"></script>
+    
+    <!-- Include story content first -->
+    <script src="scripts/story_content.js"></script>
+    
+    <!-- Include echo images data -->
+    <script src="scripts/echo_images.js"></script>
+    
+    <script>
+        // Integrated Ink story engine controller
+        const EchoesGame = {
+            story: null,         // Will hold the Ink story instance
+            container: null,     // DOM element that contains the story
+            choicesElement: null, // DOM element that contains the choices
+            currentTags: [],     // Current passage tags
+            timedChoiceActive: false, // Whether a timed choice is currently active
+            defaultChoiceIndex: 0, // Default choice index for when time expires
+            echoJournal: [],     // Collected echoes
+            
+            /**
+             * Initialize the game
+             * @param {Object} inkStory - The Ink story instance
+             * @param {String} contentElement - ID of the element to render the story in
+             * @param {String} choicesElement - ID of the element to render choices in
+             */
+            init: function(inkStory, contentElement, choicesElement) {
+                console.log('EchoesGame.init started');
+                this.story = inkStory;
+                this.container = document.getElementById(contentElement);
+                this.choicesElement = document.getElementById(choicesElement);
+                
+                console.log('DOM elements found:', {
+                    container: !!this.container,
+                    choicesElement: !!this.choicesElement
+                });
+                
+                // Reset state
+                this.echoJournal = [];
+                
+                // Set up event listeners
+                this.setupListeners();
+                console.log('Event listeners set up');
+                
+                // Start the game
+                try {
+                    console.log('Attempting to start story...');
+                    this.continueStory();
+                    console.log('Story started successfully');
+                } catch (error) {
+                    console.error('Error starting story:', error);
+                    throw error;
+                }
+                
+                // Make timeExpired function available globally for the timer system
+                window.timeExpired = this.handleTimeExpired.bind(this);
+                console.log('EchoesGame.init completed');
+            },
+            
+            /**
+             * Set up event listeners
+             */
+            setupListeners: function() {
+                // Listen for choice selections
+                document.addEventListener('click', (event) => {
+                    const choiceElement = event.target.closest('.choice');
+                    if (!choiceElement) return;
+                    
+                    const choiceIndex = parseInt(choiceElement.dataset.index, 10);
+                    this.makeChoice(choiceIndex);
+                });
+                
+                // Listen for key presses
+                document.addEventListener('keydown', (event) => {
+                    // Number keys 1-9 for choices
+                    if (event.key >= '1' && event.key <= '9') {
+                        const choiceIndex = parseInt(event.key, 10) - 1;
+                        if (choiceIndex < this.story.currentChoices.length) {
+                            this.makeChoice(choiceIndex);
+                        }
+                    }
+                    
+                    // Space or Enter to continue if there's only one choice
+                    if ((event.key === ' ' || event.key === 'Enter') && this.story.currentChoices.length === 1) {
+                        this.makeChoice(0);
+                    }
+                });
+            },
+            
+            /**
+             * Continue the story flow
+             */
+            continueStory: function() {
+                console.log('continueStory started');
+                
+                // Cancel any active timers when continuing to a new passage
+                if (window.cancelDecisionTimer) {
+                    window.cancelDecisionTimer();
+                }
+                this.timedChoiceActive = false;
+                
+                // Create story fragment container
+                const storyFragment = document.createElement('div');
+                storyFragment.className = 'story-fragment';
+                
+                console.log('Story can continue?', this.story.canContinue);
+                
+                // Keep getting content until we hit a choice or the end
+                try {
+                    while(this.story.canContinue) {
+                        // Get the next line of story content
+                        console.log('Getting next line of story content...');
+                        const text = this.story.Continue();
+                        console.log('Content received:', text);
+                        
+                        // Get tags - these may come as a single string with spaces
+                        const rawTags = this.story.currentTags;
+                        console.log('Raw tags from story:', rawTags);
+                        
+                        // Process tags from various formats
+                        this.currentTags = this.processTags(rawTags);
+                        console.log('Processed tags:', this.currentTags);
+                        
+                        // Process empty text (sometimes used for tags only)
+                        if (text.trim() === '') {
+                            console.log('Empty text, processing tags only');
+                            this.processTagEffects(this.currentTags);
+                            continue;
+                        }
+                        
+                        // Create a paragraph element
+                        const paragraphElement = document.createElement('p');
+                        paragraphElement.innerHTML = this.processText(text);
+                        storyFragment.appendChild(paragraphElement);
+                        
+                        // Process tags for content changes
+                        this.processTagEffects(this.currentTags);
+                    }
+                    
+                    // Append the story fragment to the container
+                    this.container.appendChild(storyFragment);
+                    
+                    // Scroll to the bottom
+                    this.container.scrollTop = this.container.scrollHeight;
+                    
+                    // Display choices or end the story
+                    this.displayChoices();
+                    console.log('continueStory completed successfully');
+                } catch (error) {
+                    console.error('Error in continueStory:', error);
+                    throw error;
+                }
+            },
+            
+            /**
+             * Process text for markdown-like formatting
+             * @param {String} text - The raw text from the story
+             * @returns {String} - Formatted HTML
+             */
+            processText: function(text) {
+                // Replace ** for bold text
+                text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                
+                // Replace * for italic text
+                text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                
+                // Replace newlines with <br>
+                text = text.replace(/\n/g, '<br>');
+                
+                return text;
+            },
+            
+            /**
+             * Process raw tags into a normalized array
+             * @param {Array|String} rawTags - Tags from the Ink story
+             * @returns {Array} - Normalized array of tag strings
+             */
+            processTags: function(rawTags) {
+                if (!rawTags || rawTags.length === 0) return [];
+                
+                let processedTags = [];
+                
+                try {
+                    // Case 1: Tags are already in array form
+                    if (Array.isArray(rawTags)) {
+                        rawTags.forEach(tag => {
+                            // If the tag contains spaces, it might be multiple tags in a single string
+                            if (typeof tag === 'string' && tag.includes(' ')) {
+                                // Split by space and add each part
+                                processedTags = processedTags.concat(tag.split(' '));
+                            } else {
+                                // Single tag
+                                processedTags.push(tag);
+                            }
+                        });
+                    }
+                    // Case 2: Single string with space-separated tags
+                    else if (typeof rawTags === 'string') {
+                        processedTags = rawTags.split(' ');
+                    }
+                    // Case 3: Unknown format, try to convert to string and split
+                    else {
+                        console.warn('Unknown tag format:', rawTags);
+                        try {
+                            const tagStr = String(rawTags);
+                            processedTags = tagStr.split(' ');
+                        } catch (e) {
+                            console.error('Failed to process tags:', e);
+                        }
+                    }
+                    
+                    // Filter out any empty strings
+                    processedTags = processedTags.filter(tag => tag && tag.trim() !== '');
+                    
+                    return processedTags;
+                } catch (error) {
+                    console.error('Error processing tags:', error);
+                    // Return empty array on error
+                    return [];
+                }
+            },
+            
+            /**
+             * Process tags for content effects (visuals, echoes, timers, etc)
+             * @param {Array} tags - The processed tags to handle
+             */
+            processTagEffects: function(tags) {
+                if (!tags || tags.length === 0) return;
+                
+                console.log("Processing tag effects:", tags);
+                
+                // Update location and visual state based on tags
+                updateVisualState(tags);
+                
+                // Check for ending tag (for special ending handling)
+                const endingTag = tags.find(tag => tag.startsWith('ending:'));
+                if (endingTag) {
+                    const endingType = endingTag.split(':')[1].trim();
+                    this.handleEnding(endingType);
+                }
+                
+                // Check for echo-lore tags
+                if (tags.includes('echo-lore')) {
+                    // Extract echo ID from tags that start with "echo-"
+                    // but are not "echo-lore"
+                    const echoTag = tags.find(tag => tag.startsWith('echo-') && tag !== 'echo-lore');
+                    if (echoTag) {
+                        const echoId = echoTag.substring(5); // Remove "echo-" prefix
+                        
+                        if (!isNaN(parseInt(echoId)) && !this.echoJournal.includes(echoId)) {
+                            this.echoJournal.push(echoId);
+                            console.log(`Added echo ${echoId} to journal. Total echoes: ${this.echoJournal.length}`);
+                            
+                            // Update the echo journal UI
+                            updateEchoJournal(this.echoJournal);
+                            
+                            // Play echo pulse effect
+                            playEchoPulseEffect();
+                        }
+                    }
+                }
+                
+                // Check for timer tags
+                const timerTag = tags.find(tag => 
+                    tag === 'timer-standard' || 
+                    tag === 'timer-urgent' || 
+                    tag === 'timer-critical'
+                );
+                
+                if (timerTag) {
+                    this.timedChoiceActive = true;
+                    
+                    // Find the default choice index (format: default-choice:X)
+                    const defaultChoiceTag = tags.find(tag => tag.startsWith('default-choice:'));
+                    if (defaultChoiceTag) {
+                        this.defaultChoiceIndex = parseInt(defaultChoiceTag.split(':')[1].trim(), 10);
+                    } else {
+                        this.defaultChoiceIndex = 0; // Default to first choice
+                    }
+                    
+                    // Start the timer based on timer type
+                    let duration = 15; // default duration in seconds
+                    let timerType = 'standard';
+                    
+                    if (timerTag === 'timer-urgent') {
+                        duration = 10;
+                        timerType = 'urgent';
+                    } else if (timerTag === 'timer-critical') {
+                        duration = 7;
+                        timerType = 'critical';
+                    }
+                    
+                    if (window.startDecisionTimer) {
+                        window.startDecisionTimer(duration, timerType);
+                    }
+                }
+            },
+            
+            /**
+             * Display the available choices
+             */
+            displayChoices: function() {
+                // Clear existing choices
+                this.choicesElement.innerHTML = '';
+                
+                // Check if we have any choices
+                if (this.story.currentChoices.length > 0) {
+                    const choicesList = document.createElement('ul');
+                    choicesList.className = 'choices-list';
+                    
+                    // Create choice elements
+                    this.story.currentChoices.forEach((choice, index) => {
+                        const choiceElement = document.createElement('li');
+                        choiceElement.className = 'choice';
+                        choiceElement.dataset.index = index;
+                        choiceElement.innerHTML = `<span class="choice-number">${index + 1}</span> ${this.processText(choice.text)}`;
+                        choicesList.appendChild(choiceElement);
+                    });
+                    
+                    this.choicesElement.appendChild(choicesList);
+                }
+                // End of story
+                else if (!this.story.canContinue) {
+                    const endElement = document.createElement('p');
+                    endElement.className = 'story-end';
+                    endElement.textContent = 'The End';
+                    this.choicesElement.appendChild(endElement);
+                    
+                    // Add restart button
+                    const restartButton = document.createElement('button');
+                    restartButton.className = 'begin-button';
+                    restartButton.textContent = 'Start Again';
+                    restartButton.addEventListener('click', () => {
+                        window.location.reload();
+                    });
+                    this.choicesElement.appendChild(restartButton);
+                }
+            },
+            
+            /**
+             * Make a choice and continue the story
+             * @param {Number} choiceIndex - The index of the choice to make
+             */
+            makeChoice: function(choiceIndex) {
+                if (choiceIndex < 0 || choiceIndex >= this.story.currentChoices.length) return;
+                
+                // Create a record of the choice in the story
+                const choiceText = this.story.currentChoices[choiceIndex].text;
+                const choiceElement = document.createElement('div');
+                choiceElement.className = 'player-choice';
+                choiceElement.innerHTML = this.processText(choiceText);
+                this.container.appendChild(choiceElement);
+                
+                // Tell the story which choice was made
+                this.story.ChooseChoiceIndex(choiceIndex);
+                
+                // Cancel any active timers
+                if (window.cancelDecisionTimer) {
+                    window.cancelDecisionTimer();
+                }
+                
+                // Continue the story
+                this.continueStory();
+            },
+            
+            /**
+             * Handle a timed choice expiration
+             */
+            handleTimeExpired: function() {
+                if (!this.timedChoiceActive) return;
+                
+                this.timedChoiceActive = false;
+                
+                // Check if we have valid choices
+                if (this.story.currentChoices.length > 0) {
+                    // Get the default choice index, ensuring it's valid
+                    const defaultIndex = Math.min(this.defaultChoiceIndex, this.story.currentChoices.length - 1);
+                    
+                    // Make the default choice
+                    this.makeChoice(defaultIndex);
+                }
+            },
+            
+            /**
+             * Handle special ending conditions
+             * @param {String} endingType - The type of ending
+             */
+            handleEnding: function(endingType) {
+                console.log(`Reached ending: ${endingType}`);
+                
+                // Display an ending-specific message or special content
+                const endingElement = document.createElement('div');
+                endingElement.className = 'ending-message';
+                
+                switch(endingType) {
+                    case 'truth':
+                        endingElement.innerHTML = '<h3>Truth Ending</h3><p>You have uncovered the complete truth.</p>';
+                        break;
+                    case 'partial':
+                        endingElement.innerHTML = '<h3>Partial Understanding</h3><p>You have learned some of the truth, but mysteries remain.</p>';
+                        break;
+                    case 'demo':
+                        endingElement.innerHTML = `<h3>Demo Complete</h3><p>You've reached the end of the demo.</p><p>You found ${this.echoJournal.length} echo fragments.</p>`;
+                        break;
+                    default:
+                        endingElement.innerHTML = '<h3>The End</h3><p>Your journey has concluded.</p>';
+                }
+                
+                this.container.appendChild(endingElement);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the game with the pre-compiled story content
+            initGame();
+            
+            // Set up control button listeners
+            document.getElementById('echo-toggle').addEventListener('click', toggleEchoJournal);
+            document.getElementById('restart-button').addEventListener('click', restartGame);
+            document.getElementById('menu-button').addEventListener('click', goToMenu);
+        });
+        
+        function initGame() {
+            try {
+                // Clear loading indicator
+                document.getElementById('story-container').innerHTML = '';
+                
+                // Debug information
+                console.log('Starting game initialization...');
+                
+                // Check if story content is available
+                if (!window.storyContent) {
+                    console.error('Story content not found!');
+                    throw new Error('Story content not found!');
+                }
+                
+                console.log('Story content loaded successfully');
+                
+                // Check if inkjs is available
+                if (typeof inkjs === 'undefined') {
+                    console.error('Ink.js library not found!');
+                    throw new Error('Ink.js library not found!');
+                }
+                
+                console.log('ink.js library loaded successfully');
+                
+                try {
+                    // Create a new Story instance from the content
+                    const inkStory = new inkjs.Story(window.storyContent);
+                    console.log('Ink story instance created successfully');
+                    
+                    // Debug story structure
+                    console.log('Story structure:', inkStory);
+                    
+                    // Initialize the Echoes game with the story and DOM elements
+                    EchoesGame.init(inkStory, 'story-container', 'choices-container');
+                    console.log('EchoesGame initialized successfully');
+                    
+                    // Set up the timer for timed choices
+                    setupTimerSystem();
+                    
+                    // Empty the echo journal UI
+                    updateEchoJournal([]);
+                } catch (parseError) {
+                    console.error('Error parsing story JSON:', parseError);
+                    
+                    // Extract more detailed error information
+                    let errorDetails = parseError.message || 'Unknown parsing error';
+                    if (parseError.stack) {
+                        console.error('Error stack:', parseError.stack);
+                    }
+                    
+                    // Show more detailed error in the UI
+                    let errorMessage = document.createElement('div');
+                    errorMessage.className = 'error-message';
+                    errorMessage.innerHTML = `
+                        <strong>Failed to parse story file:</strong>
+                        <pre>${errorDetails}</pre>
+                        <p>Check the browser console (F12) for more details.</p>
+                    `;
+                    document.getElementById('story-container').appendChild(errorMessage);
+                    
+                    throw parseError;
+                }
+            } catch (error) {
+                console.error('Error initializing game:', error);
+                showErrorMessage('Error initializing the game: ' + error.message);
+            }
+        }
+        
+        function showErrorMessage(message) {
+            document.getElementById('story-container').innerHTML = 
+                `<div class="error-message">
+                    <strong>Error:</strong> ${message}
+                    <p>Please try refreshing the page or contact support if the issue persists.</p>
+                    <p>Check the browser console (F12) for more details.</p>
+                </div>`;
+        }
+        
+        function toggleEchoJournal() {
+            const echoCollection = document.getElementById('echo-collection');
+            echoCollection.classList.toggle('shown');
+            
+            // Update button state
+            const button = document.getElementById('echo-toggle');
+            if (echoCollection.classList.contains('shown')) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        }
+        
+        function restartGame() {
+            if (confirm('Are you sure you want to restart the game? All progress will be lost.')) {
+                window.location.reload();
+            }
+        }
+        
+        function goToMenu() {
+            window.location.href = 'index.html';
+        }
+        
+        function setupTimerSystem() {
+            // Set up globals for the timer system
+            window.timerElement = document.getElementById('timer-container');
+            window.timerBarElement = document.getElementById('timer-bar');
+            
+            window.startDecisionTimer = function(duration, timerType) {
+                // Show the timer
+                window.timerElement.style.display = 'block';
+                window.timerBarElement.className = 'timer-bar';
+                
+                // Add class based on timer type
+                if (timerType === 'urgent') {
+                    window.timerBarElement.classList.add('urgent');
+                } else if (timerType === 'critical') {
+                    window.timerBarElement.classList.add('critical');
+                }
+                
+                // Reset to full width
+                window.timerBarElement.style.width = '100%';
+                
+                // Animate the timer bar
+                window.timerBarElement.style.transition = `width ${duration}s linear`;
+                setTimeout(() => { window.timerBarElement.style.width = '0%'; }, 10);
+                
+                // Set timeout to trigger time expired
+                window.timerTimeout = setTimeout(window.timeExpired, duration * 1000);
+            };
+            
+            window.cancelDecisionTimer = function() {
+                // Hide the timer
+                window.timerElement.style.display = 'none';
+                
+                // Cancel any active timeout
+                if (window.timerTimeout) {
+                    clearTimeout(window.timerTimeout);
+                    window.timerTimeout = null;
+                }
+            };
+        }
+        
+        function updateEchoJournal(echoIds) {
+            const echoEntriesElement = document.getElementById('echo-entries');
+            
+            // Clear existing entries
+            echoEntriesElement.innerHTML = '';
+            
+            if (echoIds.length === 0) {
+                // No echoes collected yet
+                echoEntriesElement.innerHTML = '<div class="empty-collection">No echoes collected yet.</div>';
+                return;
+            }
+            
+            // Get echo data from the echo_images.js module
+            if (window.EchoImages && window.EchoImages.echoData) {
+                echoIds.forEach(echoId => {
+                    const echoData = window.EchoImages.echoData[echoId];
+                    if (echoData) {
+                        const echoItem = document.createElement('div');
+                        echoItem.className = 'echo-item';
+                        
+                        // Create echo content
+                        let echoContent = `<h4>${echoData.name || 'Echo Fragment'}</h4>`;
+                        
+                        // Add image if available, with error handling
+                        if (echoData.image) {
+                            echoContent += `
+                                <img src="${echoData.image}" 
+                                     alt="${echoData.name}" 
+                                     class="echo-image"
+                                     onerror="this.onerror=null; this.src='assets/echoes/placeholder.jpg'; console.log('Failed to load echo image: ${echoData.image}');">
+                            `;
+                        } else {
+                            // Use placeholder if no image is specified
+                            echoContent += `<div class="echo-placeholder">Echo Fragment #${echoId}</div>`;
+                        }
+                        
+                        // Add description
+                        echoContent += `<p>${echoData.description || 'A fragment of memory from the past.'}</p>`;
+                        
+                        echoItem.innerHTML = echoContent;
+                        echoEntriesElement.appendChild(echoItem);
+                    }
+                });
+            }
+        }
+        
+        function updateVisualState(tags) {
+            // Handle location changes
+            const locationTag = tags.find(tag => tag === 'city_ruins' || 
+                                               tag === 'whisper_caverns' || 
+                                               tag === 'memory_gate' || 
+                                               tag === 'ancient_library');
+            
+            if (locationTag) {
+                updateLocation(locationTag);
+            }
+            
+            // Handle special effects
+            if (tags.includes('effect-echo_pulse')) {
+                playEchoPulseEffect();
+            }
+            
+            // Handle show_wanderer tag
+            if (tags.includes('show_wanderer')) {
+                console.log("Would show wanderer character here");
+                // Implementation for showing the wanderer character
+            }
+        }
+        
+        function updateLocation(locationTag) {
+            // Convert tag to display name
+            const locationNames = {
+                'city_ruins': 'CITY RUINS',
+                'whisper_caverns': 'WHISPER CAVERNS',
+                'memory_gate': 'MEMORY GATE',
+                'ancient_library': 'ANCIENT LIBRARY'
+            };
+            
+            const displayName = locationNames[locationTag] || 'UNKNOWN LOCATION';
+            
+            // Find or create location indicator
+            let locationIndicator = document.querySelector('.location-indicator');
+            if (!locationIndicator) {
+                locationIndicator = document.createElement('div');
+                locationIndicator.className = 'location-indicator';
+                const storyContainer = document.getElementById('story-container');
+                storyContainer.insertAdjacentElement('afterbegin', locationIndicator);
+            }
+            
+            // Update the location text
+            locationIndicator.textContent = displayName;
+        }
+        
+        function playEchoPulseEffect() {
+            // Add a visual pulse effect to the page
+            const body = document.body;
+            const effect = document.createElement('div');
+            effect.style.position = 'fixed';
+            effect.style.top = '0';
+            effect.style.left = '0';
+            effect.style.right = '0';
+            effect.style.bottom = '0';
+            effect.style.backgroundColor = 'rgba(76, 175, 80, 0.3)';
+            effect.style.zIndex = '999';
+            effect.style.pointerEvents = 'none';
+            effect.style.animation = 'pulse 2s ease-out';
+            
+            // Add keyframe animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulse {
+                    0% { opacity: 0; }
+                    25% { opacity: 0.7; }
+                    100% { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Add to body and remove after animation
+            body.appendChild(effect);
+            setTimeout(() => {
+                body.removeChild(effect);
+                document.head.removeChild(style);
+            }, 2000);
+        }
+    </script>
+</body>
+</html> 

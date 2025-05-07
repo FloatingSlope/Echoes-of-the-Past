@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of the Past - Menu</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Georgia', serif;
+            color: #f0f0f0;
+        }
+        
+        .fullscreen-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('assets/locations/city_ruins.png');
+            background-size: cover;
+            background-position: center;
+            background-color: #111; /* Fallback color */
+            filter: brightness(0.6);
+            z-index: -1;
+        }
+        
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 80%;
+            max-width: 800px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            letter-spacing: 3px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            font-style: italic;
+        }
+        
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .menu-button {
+            background-color: rgba(45, 52, 95, 0.3);
+            border: 2px solid rgba(88, 101, 242, 0.5);
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .menu-button:hover {
+            background-color: rgba(88, 101, 242, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(130, 87, 229, 0.6);
+        }
+        
+        .menu-button.primary {
+            background-color: rgba(76, 175, 80, 0.3);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+        }
+        
+        .menu-button.primary:hover {
+            background-color: rgba(76, 175, 80, 0.4);
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.6);
+        }
+        
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(50, 50, 70, 0.7);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .back-button:hover {
+            background-color: rgba(70, 70, 100, 0.9);
+            box-shadow: 0 0 10px rgba(70, 70, 100, 0.5);
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background image container -->
+    <div class="fullscreen-bg"></div>
+    
+    <!-- Main content -->
+    <div class="content fade-in">
+        <h1>ECHOES OF THE PAST</h1>
+        <p class="subtitle">Select an option to begin your journey</p>
+        
+        <div class="menu-container">
+            <a href="simplified.html" class="menu-button primary">Start Journey</a>
+            <a href="credits.html" class="menu-button">Credits</a>
+        </div>
+    </div>
+    
+    <a href="index.html" class="back-button">Back</a>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Menu loaded successfully');
+        });
+    </script>
+</body>
+</html> 

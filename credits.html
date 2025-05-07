@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of the Past - Credits</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #0d1117;
+            color: #e6e6e6;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background-color: #161b22;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .title {
+            margin: 0;
+            color: #8257e5;
+            text-shadow: 0 0 10px rgba(130, 87, 229, 0.4);
+        }
+        
+        .back-button {
+            background-color: rgba(45, 52, 95, 0.3);
+            border: 1px solid rgba(88, 101, 242, 0.5);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .back-button:hover {
+            background-color: rgba(88, 101, 242, 0.4);
+        }
+        
+        .credits-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: rgba(22, 27, 34, 0.8);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .credits-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #5865f2;
+            padding-bottom: 15px;
+            text-align: center;
+        }
+        
+        .credits-header h2 {
+            margin: 0;
+            color: #8257e5;
+            font-size: 32px;
+            letter-spacing: 2px;
+        }
+        
+        .credits-section {
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .credits-section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .credits-section:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        .credits-section:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+        
+        .credits-section:nth-child(5) {
+            animation-delay: 0.8s;
+        }
+        
+        .credits-section h3 {
+            color: #5865f2;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-left: 3px solid #8257e5;
+            padding-left: 10px;
+        }
+        
+        .credits-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .credit-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 8px;
+            object-fit: cover;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid #30363d;
+            animation: pulse 2s infinite alternate;
+        }
+        
+        .credit-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(130, 87, 229, 0.6);
+        }
+        
+        .credit-image:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .credit-image:nth-child(2) {
+            animation-delay: 0.7s;
+        }
+        
+        .credit-image:nth-child(3) {
+            animation-delay: 1.4s;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            from {
+                box-shadow: 0 0 5px rgba(130, 87, 229, 0.3);
+            }
+            to {
+                box-shadow: 0 0 15px rgba(130, 87, 229, 0.8);
+            }
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+            background-color: #161b22;
+            border-top: 1px solid #30363d;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Echoes of the Past</h1>
+            <a href="menu.html" class="back-button">Back to Menu</a>
+        </header>
+        
+        <main class="credits-container">
+            <div class="credits-header">
+                <h2>Credits</h2>
+            </div>
+            
+            <div class="credits-section">
+                <h3>Game Development</h3>
+                <p>This game was developed by Abdullah Rana as a project for ENGL 3500: Literary Games.</p>
+                <p>Created with passion and dedication to storytelling through interactive fiction.</p>
+            </div>
+            
+            <div class="credits-section">
+                <h3>Special Thanks</h3>
+                <p>We would like to thank our professors, Jason and Brad, for their guidance and support.</p>
+                <p>Your guidance and support made this project possible.</p>
+            </div>
+            
+            <div class="credits-section">
+                <h3>Art and Design</h3>
+                <p>The game features art created by me with the help of Sora.</p>
+                <p>All visual elements were carefully crafted to enhance the atmosphere of the game.</p>
+            </div>
+            
+            <div class="credits-section">
+                <h3>Music</h3>
+                <p>Doesn't exist currently since this game is a work in progress.</p>
+                <p>I'm working on it though!</p>
+            </div>
+            
+            <div class="credits-images">
+                <img src="assets/echoes/garden_flower.png" alt="Asset 1" class="credit-image">
+                <img src="assets/echoes/faceless_mask.png" alt="Asset 2" class="credit-image">
+                <img src="assets/echoes/shrine_shard.png" alt="Asset 3" class="credit-image">
+            </div>
+        </main>
+        
+        <footer class="footer">
+            &copy; 2023 Echoes of the Past. All rights reserved.
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Credits page loaded successfully');
+        });
+    </script>
+</body>
+</html> 

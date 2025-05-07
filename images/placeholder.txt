@@ -1,0 +1,10 @@
+This directory needs the following image files:
+
+1. homepage_bg.jpg - Dark, atmospheric background image for the homepage with ruins or a mysterious landscape
+2. menu_bg.jpg - Different background for the menu page, perhaps showing another angle of the ruins or the memory core
+
+Additionally, you'll need to create the following directory structure:
+- images/locations/ - For all location images (city_ruins.jpg, whisper_caverns.jpg, etc.)
+- images/echoes/ - For all echo fragment images (shrine_shard.jpg, arch_vision.jpg, etc.)
+
+The placeholder images can be replaced with actual artwork once available. 

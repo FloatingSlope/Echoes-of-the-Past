@@ -1,70 +1,54 @@
-# Getting Started with Create React App
+# Echoes of the Past
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A journey through memory and time - an interactive narrative experience.
 
-## Available Scripts
+## About
 
-In the project directory, you can run:
+"Echoes of the Past" is a web-based narrative game where players explore a mysterious world, collecting memory fragments and uncovering the history of a forgotten civilization. Navigate through different locations, interact with ancient artifacts, and make choices that will determine the outcome of your journey.
 
-### `npm start`
+## How to Play
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Open the game in your web browser by accessing the deployment URL or index.html
+2. Press the "Begin" button to start your journey
+3. Use the on-screen buttons to navigate through the story
+4. Collect echoes (memory fragments) to unlock new insights
+5. Explore various locations on the map
+6. Make choices that determine the outcome of your journey
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+- Rich narrative with multiple endings
+- Location-based exploration
+- Collectable memory fragments ("echoes")
+- Interactive map
+- Atmospheric visuals
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Deployment
 
-### `npm run build`
+This project is deployed on Vercel. To deploy your own version:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Fork this repository
+2. Sign up for [Vercel](https://vercel.com) (if you haven't already)
+3. Import your fork of this repository
+4. Configure your deployment settings (default settings should work fine)
+5. Deploy
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Local Development
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To run this project locally:
 
-### `npm run eject`
+```bash
+# Install dependencies (if you want to use the dev server)
+npm install
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Start a local development server
+npm run dev
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Credits
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+All story content and images are original creations for this project.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## License
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+ISC License
